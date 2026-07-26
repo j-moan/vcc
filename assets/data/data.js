@@ -35,19 +35,19 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
-          "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
-          "type": "placeholder",
-          "label": "picture test",
-          "image": "reading.jpg",
-          "target": "",
-          "active": true
-        },
-        {
           "id": "movement-video",
           "type": "video",
           "label": "Movement",
           "image": "movement.jpg",
           "target": "M7lc1UVf-VE",
+          "active": true
+        },
+        {
+          "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
+          "type": "placeholder",
+          "label": "picture test",
+          "image": "reading.jpg",
+          "target": "",
           "active": true
         }
       ]
