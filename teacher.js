@@ -2,7 +2,12 @@
 
 import { loadProject } from "./project/project-loader.js";
 import { ProjectModel } from "./models/project-model.js";
-import { loadWorkingProjectData, saveWorkingProjectData } from "./project/project-storage.js";
+import {
+  loadWorkingProjectData,
+  saveWorkingProjectData,
+  catalogAssets,
+  publishProject,
+} from "./project/project-storage.js";
 import { getImagePath, getDefaultTileImagePath } from "./utilities/asset-paths.js";
 
 const publishButton = document.querySelector("#publish-button");
@@ -74,7 +79,6 @@ let editingNavigationContainerId = null;
 let selectedImagePath = null;
 let imagePickerTarget = "tile";
 let selectedPdf = null;
-let assetsFolderHandle = null;
 
 async function initializeTeacherView() {
   try {
@@ -1157,126 +1161,6 @@ function showTeacherConfirmation(message, title = "Confirm") {
   });
 }
 
-function createDataFileContents(projectData) {
-  return `"use strict";
-
-window.CLASSROOM_SITE = ${JSON.stringify(projectData, null, 2)};
-`;
-}
-
-async function getAssetsFolder() {
-  if (assetsFolderHandle) {
-    return assetsFolderHandle;
-  }
-
-  if (!window.showDirectoryPicker) {
-    throw new Error("Folder access is not supported. Use Chrome or Edge to run Teacher Mode.");
-  }
-
-  assetsFolderHandle = await window.showDirectoryPicker({
-    mode: "readwrite",
-  });
-
-  if (assetsFolderHandle.name !== "assets") {
-    assetsFolderHandle = null;
-    throw new Error('Please select the folder named "assets".');
-  }
-
-  return assetsFolderHandle;
-}
-
-async function listAssets(folderHandle, indent = "") {
-  for await (const entry of folderHandle.values()) {
-    if (entry.kind === "directory") {
-      console.log(`${indent}${entry.name}/`);
-      await listAssets(entry, `${indent}    `);
-    } else {
-      console.log(`${indent}${entry.name}`);
-    }
-  }
-}
-
-async function buildAssetCatalogs(assetsFolder) {
-  const catalogs = {};
-
-  for await (const folder of assetsFolder.values()) {
-    if (folder.kind !== "directory") {
-      continue;
-    }
-
-    if (folder.name === "data" || folder.name.startsWith(".")) {
-      continue;
-    }
-
-    catalogs[folder.name] = [];
-
-    for await (const entry of folder.values()) {
-      if (entry.kind !== "file") {
-        continue;
-      }
-
-      if (entry.name === "catalog.js") {
-        continue;
-      }
-
-      catalogs[folder.name].push(entry.name);
-    }
-
-    catalogs[folder.name].sort((a, b) => a.localeCompare(b));
-  }
-
-  return catalogs;
-}
-
-function createCatalogFileContents(folderName, filenames) {
-  const globalName = `CLASSROOM_${folderName.toUpperCase()}`;
-
-  return `"use strict";
-
-window.${globalName} = ${JSON.stringify(filenames, null, 2)};
-`;
-}
-
-async function writeCatalogFiles(assetsFolder, catalogs) {
-  for (const [folderName, filenames] of Object.entries(catalogs)) {
-    const folderHandle = await assetsFolder.getDirectoryHandle(folderName);
-
-    const catalogFileHandle = await folderHandle.getFileHandle("catalog.js", {
-      create: true,
-    });
-
-    const writable = await catalogFileHandle.createWritable();
-
-    await writable.write(createCatalogFileContents(folderName, filenames));
-
-    await writable.close();
-  }
-}
-
-async function catalogAssets() {
-  const assetsFolder = await getAssetsFolder();
-  const catalogs = await buildAssetCatalogs(assetsFolder);
-
-  await writeCatalogFiles(assetsFolder, catalogs);
-
-  return assetsFolder;
-}
-
-async function writeDataFile(assetsFolder, projectData) {
-  const dataFolder = await assetsFolder.getDirectoryHandle("data", {
-    create: true,
-  });
-
-  const dataFileHandle = await dataFolder.getFileHandle("data.js", {
-    create: true,
-  });
-
-  const writable = await dataFileHandle.createWritable();
-
-  await writable.write(createDataFileContents(projectData));
-  await writable.close();
-}
-
 /* =========================================================
    Event Listeners
    ========================================================= */
@@ -1358,17 +1242,19 @@ pdfPickerDialog.addEventListener("cancel", (event) => {
 });
 publishButton.addEventListener("click", async () => {
   try {
-    const assetsFolder = await catalogAssets();
+    await saveWorkingProjectData(project.toObject());
 
-    await writeDataFile(assetsFolder, project.toObject());
+    const result = await publishProject();
 
-    console.log("Publish files updated.");
+    console.log(
+      result.status === "no-changes" ? "Nothing new to publish." : "Classroom site published.",
+    );
   } catch (error) {
-    if (error.name === "AbortError") {
-      return;
-    }
-
     console.error("Publish failed.", error);
+    showTeacherMessage(
+      error.message || "The classroom site could not be published.",
+      "Publish Failed",
+    );
   }
 });
 toolbarButtons.forEach((button) => {
@@ -1380,16 +1266,13 @@ toolbarButtons.forEach((button) => {
     }, 1000);
   });
 });
+
 catalogAssetsButton.addEventListener("click", async () => {
   try {
     await catalogAssets();
     console.log("Asset catalogs updated.");
   } catch (error) {
-    if (error.name === "AbortError") {
-      return;
-    }
-
-    console.error("Assets folder could not be selected.", error);
+    console.error(error);
   }
 });
 
