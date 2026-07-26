@@ -37,17 +37,17 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
+          "type": "section",
+          "label": "seperation",
+          "active": true
+        },
+        {
           "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
           "type": "placeholder",
           "label": "picture test",
           "image": "reading.jpg",
           "target": "",
-          "active": true
-        },
-        {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
           "active": true
         }
       ]
