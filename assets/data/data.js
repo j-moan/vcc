@@ -37,8 +37,8 @@ window.CLASSROOM_SITE = {
         {
           "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
           "type": "placeholder",
-          "label": "picture testing",
-          "image": "octopus.jpg",
+          "label": "picture test",
+          "image": "reading.jpg",
           "target": "",
           "active": true
         },
