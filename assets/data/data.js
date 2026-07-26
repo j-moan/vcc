@@ -24,7 +24,7 @@ window.CLASSROOM_SITE = {
         {
           "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
           "type": "section",
-          "label": "separator",
+          "label": "seperation",
           "active": true
         },
         {
@@ -35,19 +35,19 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
+          "type": "placeholder",
+          "label": "picture testing",
+          "image": "octopus.jpg",
+          "target": "",
+          "active": true
+        },
+        {
           "id": "movement-video",
           "type": "video",
           "label": "Movement",
           "image": "movement.jpg",
           "target": "M7lc1UVf-VE",
-          "active": true
-        },
-        {
-          "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
-          "type": "placeholder",
-          "label": "picture test",
-          "image": "octopus.jpg",
-          "target": "",
           "active": true
         }
       ]
@@ -123,12 +123,24 @@ window.CLASSROOM_SITE = {
       "parent": "home",
       "active": true,
       "children": [
-        "math-videos"
+        "math-videos",
+        "math-documents",
+        "math-images"
       ],
       "layout": [
         {
           "type": "navigation",
           "container": "math-videos",
+          "image": ""
+        },
+        {
+          "type": "navigation",
+          "container": "math-documents",
+          "image": "calendar.jpg"
+        },
+        {
+          "type": "navigation",
+          "container": "math-images",
           "image": ""
         }
       ]
@@ -166,6 +178,22 @@ window.CLASSROOM_SITE = {
           "active": true
         }
       ]
+    },
+    "math-images": {
+      "title": "math imageing",
+      "subtitle": "",
+      "parent": "math",
+      "active": true,
+      "children": [],
+      "layout": []
+    },
+    "math-documents": {
+      "title": "math documenting",
+      "subtitle": "",
+      "parent": "math",
+      "active": true,
+      "children": [],
+      "layout": []
     }
   }
 };
