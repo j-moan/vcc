@@ -22,16 +22,16 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
+          "type": "section",
+          "label": "seperation",
+          "active": true
+        },
+        {
           "id": "nav-math",
           "type": "navigation",
           "container": "math",
           "image": "math.jpg",
-          "active": true
-        },
-        {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
           "active": true
         },
         {
