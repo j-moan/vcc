@@ -509,6 +509,35 @@ export class ProjectModel {
     };
   }
 
+  updateLayoutEntry(containerId, entryIndex, changes) {
+    const container = this.#getContainerReference(containerId);
+
+    if (!container || !Array.isArray(container.layout)) {
+      throw new ProjectModelError(
+        "CONTAINER_NOT_FOUND",
+        `Container "${containerId}" does not exist.`,
+      );
+    }
+
+    if (!Number.isInteger(entryIndex) || entryIndex < 0 || entryIndex >= container.layout.length) {
+      throw new ProjectModelError(
+        "LAYOUT_ENTRY_NOT_FOUND",
+        "The selected layout item does not exist.",
+      );
+    }
+
+    const entry = container.layout[entryIndex];
+
+    Object.assign(entry, structuredClone(changes));
+
+    this.#emit("layoutEntryUpdated", {
+      containerId,
+      entryIndex,
+    });
+
+    return structuredClone(entry);
+  }
+
   // =========================================
   // Serialization and Validation Support
   // =========================================

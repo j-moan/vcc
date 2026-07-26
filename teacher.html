@@ -58,9 +58,7 @@
         </button>
 
         <!-- B2 - Rename Page -->
-        <button id="rename-page-button" class="teacher-tool-button" type="button">
-          Rename Page
-        </button>
+        <button class="teacher-tool-button" type="button">B2</button>
 
         <!-- B3 - Delete Page -->
         <button id="delete-page-button" class="teacher-tool-button" type="button">
@@ -88,8 +86,8 @@
           Move Down
         </button>
 
-        <!-- B9 -  -->
-        <button class="teacher-tool-button" type="button">B9</button>
+        <!-- B9 - Edit Item -->
+        <button id="edit-item-button" class="teacher-tool-button" type="button">Edit Item</button>
 
         <!-- B10 - Catalog Assets -->
         <button id="catalog-assets-button" class="teacher-tool-button" type="button">
@@ -117,6 +115,30 @@
           autocomplete="off"
           required
         />
+        <label for="subpage-image-input">Navigation Image:</label>
+
+        <div class="tile-thumbnail-editor">
+          <div class="tile-thumbnail-preview-frame">
+            <img
+              id="subpage-image-preview"
+              class="tile-thumbnail-preview"
+              src="resources/default-tile.jpg"
+              alt="Selected navigation image"
+            />
+          </div>
+
+          <div>
+            <input id="subpage-image-input" class="dialog-input" type="text" readonly />
+
+            <button
+              id="change-subpage-image-button"
+              class="dialog-button dialog-button-secondary"
+              type="button"
+            >
+              Change Image
+            </button>
+          </div>
+        </div>
 
         <div class="dialog-actions">
           <button

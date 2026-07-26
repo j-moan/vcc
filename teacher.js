@@ -13,9 +13,10 @@ const addSubpageButton = document.querySelector("#add-subpage-button");
 const addSubpageDialog = document.querySelector("#add-subpage-dialog");
 const addSubpageForm = document.querySelector("#add-subpage-form");
 const subpageNameInput = document.querySelector("#subpage-name-input");
+const subpageImageInput = document.querySelector("#subpage-image-input");
+const subpageImagePreview = document.querySelector("#subpage-image-preview");
+const changeSubpageImageButton = document.querySelector("#change-subpage-image-button");
 const cancelAddSubpageButton = document.querySelector("#cancel-add-subpage-button");
-const renamePageButton = document.querySelector("#rename-page-button");
-renamePageButton.addEventListener("click", openRenamePageDialog);
 const deletePageButton = document.querySelector("#delete-page-button");
 const messageDialog = document.querySelector("#message-dialog");
 const messageDialogTitle = document.querySelector("#message-dialog-title");
@@ -23,8 +24,11 @@ const messageDialogText = document.querySelector("#message-dialog-text");
 const messageDialogOkButton = document.querySelector("#message-dialog-ok-button");
 const messageDialogCancelButton = document.querySelector("#message-dialog-cancel-button");
 const addTileButton = document.querySelector("#add-tile-button");
+const editItemButton = document.getElementById("edit-item-button");
 const addTileDialog = document.querySelector("#add-tile-dialog");
 const addTileForm = document.querySelector("#add-tile-form");
+const addTileDialogTitle = addTileDialog.querySelector("h2");
+const addTileSubmitButton = addTileForm.querySelector('button[type="submit"]');
 const tileNameInput = document.querySelector("#tile-name-input");
 const tileTypeSelect = document.querySelector("#tile-type-select");
 const tileThumbnailInput = document.querySelector("#tile-thumbnail-input");
@@ -35,6 +39,8 @@ const cancelAddTileButton = document.querySelector("#cancel-add-tile-button");
 const addSeparatorButton = document.querySelector("#add-separator-button");
 const addSeparatorDialog = document.querySelector("#add-separator-dialog");
 const addSeparatorForm = document.querySelector("#add-separator-form");
+const addSeparatorDialogTitle = addSeparatorDialog.querySelector("h2");
+const addSeparatorSubmitButton = addSeparatorForm.querySelector('button[type="submit"]');
 const separatorNameInput = document.querySelector("#separator-name-input");
 const cancelAddSeparatorButton = document.querySelector("#cancel-add-separator-button");
 const deleteItemButton = document.querySelector("#delete-item-button");
@@ -61,8 +67,12 @@ const catalogAssetsButton = document.querySelector("#catalog-assets-button");
 let project = null;
 let selectedContainerId = null;
 let selectedLayoutIndex = null;
-let renamingPage = false;
+let editingTile = false;
+let editingSeparator = false;
+let editingNavigation = false;
+let editingNavigationContainerId = null;
 let selectedImagePath = null;
+let imagePickerTarget = "tile";
 let selectedPdf = null;
 let assetsFolderHandle = null;
 
@@ -330,23 +340,47 @@ function showTreeMessage(message) {
   containerTreeElement.appendChild(messageElement);
 }
 
-function openAddSubpageDialog() {
-  renamingPage = false;
+function openAddSeparatorDialog() {
   if (!selectedContainerId) {
-    showTeacherMessage("Select a page before adding a subpage.");
+    showTeacherMessage("Select a page before adding a separator.");
     return;
   }
 
-  subpageNameInput.value = "";
-  addSubpageDialog.showModal();
+  editingSeparator = false;
+
+  addSeparatorDialogTitle.textContent = "Add Separator";
+  addSeparatorSubmitButton.textContent = "Add Separator";
+
+  separatorNameInput.value = "";
+  addSeparatorDialog.showModal();
 
   window.requestAnimationFrame(() => {
-    subpageNameInput.focus();
+    separatorNameInput.focus();
+  });
+}
+
+function openEditSeparatorDialog(entry) {
+  editingSeparator = true;
+
+  addSeparatorDialogTitle.textContent = "Edit Separator";
+  addSeparatorSubmitButton.textContent = "Save Changes";
+
+  separatorNameInput.value = entry.label || "";
+
+  addSeparatorDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    separatorNameInput.select();
   });
 }
 
 function closeAddSubpageDialog() {
+  editingNavigation = false;
+  editingNavigationContainerId = null;
+
   subpageNameInput.value = "";
+  subpageImageInput.value = "";
+  subpageImagePreview.src = getDefaultTileImagePath();
 
   if (addSubpageDialog.open) {
     addSubpageDialog.close();
@@ -362,17 +396,28 @@ async function createSubpage(event) {
     return;
   }
 
-  if (renamingPage) {
-    project.renameContainer(selectedContainerId, pageName);
+  if (editingNavigation) {
+    if (editingNavigationContainerId === null || selectedLayoutIndex === null) {
+      showTeacherMessage("The selected navigation item could not be found.");
+      return;
+    }
+
+    const editedIndex = selectedLayoutIndex;
+
+    project.renameContainer(editingNavigationContainerId, pageName);
+
+    project.updateLayoutEntry(selectedContainerId, selectedLayoutIndex, {
+      image: subpageImageInput.value.trim(),
+    });
 
     await saveWorkingProjectData(project.toObject());
 
     renderContainerTree(project.getContainerTree());
 
-    selectContainer(selectedContainerId);
+    showSelectedContainer(selectedContainerId);
+    selectLayoutEntry(editedIndex);
 
     closeAddSubpageDialog();
-
     return;
   }
 
@@ -380,7 +425,7 @@ async function createSubpage(event) {
     const newContainerId = project.createContainer({
       title: pageName,
       parentId: selectedContainerId,
-      navigationImage: "",
+      navigationImage: subpageImageInput.value.trim(),
     });
 
     await saveWorkingProjectData(project.toObject());
@@ -393,25 +438,6 @@ async function createSubpage(event) {
     console.error("Subpage could not be created.", error);
     window.alert(error.message || "The subpage could not be created.");
   }
-}
-
-function openRenamePageDialog() {
-  if (!selectedContainerId) {
-    return;
-  }
-
-  renamingPage = true;
-
-  const container = project.getContainer(selectedContainerId);
-
-  document.getElementById("add-subpage-title").textContent = "Rename Page";
-  subpageNameInput.value = container.title;
-
-  addSubpageDialog.showModal();
-
-  window.requestAnimationFrame(() => {
-    subpageNameInput.select();
-  });
 }
 
 async function deleteSelectedPage() {
@@ -462,10 +488,18 @@ async function deleteSelectedPage() {
 }
 
 function openAddTileDialog() {
+  editingTile = false;
+
+  addTileDialogTitle.textContent = "Add Tile";
+  addTileSubmitButton.textContent = "Add Tile";
+
   tileNameInput.value = "";
   tileTypeSelect.value = "placeholder";
+  tileTypeSelect.disabled = false;
+
   tileThumbnailInput.value = "";
   tileThumbnailPreview.src = getDefaultTileImagePath();
+
   tileDestinationInput.value = "";
 
   updateTileDestinationField();
@@ -477,21 +511,102 @@ function openAddTileDialog() {
   });
 }
 
-function openAddSeparatorDialog() {
-  if (!selectedContainerId) {
-    showTeacherMessage("Select a page before adding a separator.");
+function openEditItemDialog() {
+  if (selectedContainerId === null || selectedLayoutIndex === null) {
+    showTeacherMessage("Select a tile to edit.");
     return;
   }
 
-  separatorNameInput.value = "";
-  addSeparatorDialog.showModal();
+  const layout = project.getLayout(selectedContainerId);
+  const entry = layout[selectedLayoutIndex];
+
+  if (!entry) {
+    showTeacherMessage("The selected item could not be found.");
+    return;
+  }
+
+  if (entry.type === "section") {
+    openEditSeparatorDialog(entry);
+    return;
+  }
+
+  if (entry.type === "navigation") {
+    openEditNavigationDialog(entry);
+    return;
+  }
+
+  editingTile = true;
+
+  addTileDialogTitle.textContent = "Edit Tile";
+  addTileSubmitButton.textContent = "Save Changes";
+
+  tileNameInput.value = entry.label || "";
+  tileTypeSelect.value = entry.type;
+  tileTypeSelect.disabled = true;
+
+  tileThumbnailInput.value = entry.image || "";
+
+  tileThumbnailPreview.src = entry.image ? getImagePath(entry.image) : getDefaultTileImagePath();
+
+  tileDestinationInput.value = entry.target || "";
+
+  updateTileDestinationField();
+
+  addTileDialog.showModal();
 
   window.requestAnimationFrame(() => {
-    separatorNameInput.focus();
+    tileNameInput.select();
+  });
+}
+
+function openAddSubpageDialog() {
+  editingNavigation = false;
+  editingNavigationContainerId = null;
+
+  if (!selectedContainerId) {
+    showTeacherMessage("Select a page before adding a subpage.");
+    return;
+  }
+
+  document.getElementById("add-subpage-title").textContent = "Add Subpage";
+  subpageNameInput.value = "";
+  subpageImageInput.value = "";
+  subpageImagePreview.src = getDefaultTileImagePath();
+
+  addSubpageDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    subpageNameInput.focus();
+  });
+}
+
+function openEditNavigationDialog(entry) {
+  const targetContainer = project.getContainer(entry.container);
+
+  if (!targetContainer) {
+    showTeacherMessage("The page connected to this navigation item could not be found.");
+    return;
+  }
+
+  editingNavigation = true;
+  editingNavigationContainerId = entry.container;
+
+  document.getElementById("add-subpage-title").textContent = "Edit Navigation";
+
+  subpageNameInput.value = targetContainer.title || "";
+  subpageImageInput.value = entry.image || "";
+
+  subpageImagePreview.src = entry.image ? getImagePath(entry.image) : getDefaultTileImagePath();
+
+  addSubpageDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    subpageNameInput.select();
   });
 }
 
 function closeAddSeparatorDialog() {
+  editingSeparator = false;
   separatorNameInput.value = "";
 
   if (addSeparatorDialog.open) {
@@ -512,6 +627,27 @@ async function createSeparator(event) {
   if (!label) {
     showTeacherMessage("Enter a name for the separator.");
     separatorNameInput.focus();
+    return;
+  }
+
+  if (editingSeparator) {
+    if (selectedLayoutIndex === null) {
+      showTeacherMessage("The selected separator could not be found.");
+      return;
+    }
+
+    project.updateLayoutEntry(selectedContainerId, selectedLayoutIndex, {
+      label,
+    });
+
+    const editedIndex = selectedLayoutIndex;
+
+    await saveWorkingProjectData(project.toObject());
+
+    showSelectedContainer(selectedContainerId);
+    selectLayoutEntry(editedIndex);
+
+    closeAddSeparatorDialog();
     return;
   }
 
@@ -569,6 +705,37 @@ async function createTile(event) {
     return;
   }
 
+  if (editingTile) {
+    if (selectedLayoutIndex === null) {
+      showTeacherMessage("The selected tile could not be found.");
+      return;
+    }
+
+    const layout = project.getLayout(selectedContainerId);
+    const existingTile = layout[selectedLayoutIndex];
+
+    if (!existingTile) {
+      showTeacherMessage("The selected tile could not be found.");
+      return;
+    }
+
+    project.updateLayoutEntry(selectedContainerId, selectedLayoutIndex, {
+      label,
+      image,
+      target,
+    });
+
+    await saveWorkingProjectData(project.toObject());
+
+    const editedIndex = selectedLayoutIndex;
+
+    showSelectedContainer(selectedContainerId);
+    selectLayoutEntry(editedIndex);
+
+    closeAddTileDialog();
+    return;
+  }
+
   const tile = {
     id: createTileId(),
     type,
@@ -581,8 +748,6 @@ async function createTile(event) {
   const newLayoutIndex = project.addLayoutEntry(selectedContainerId, tile, selectedLayoutIndex);
 
   await saveWorkingProjectData(project.toObject());
-
-  selectedLayoutIndex = newLayoutIndex;
 
   showSelectedContainer(selectedContainerId);
   selectLayoutEntry(newLayoutIndex);
@@ -599,14 +764,40 @@ function createTileId() {
 }
 
 function closeAddTileDialog() {
+  editingTile = false;
+  tileTypeSelect.disabled = false;
+
   if (addTileDialog.open) {
     addTileDialog.close();
   }
 }
 
+function openSubpageImagePickerDialog() {
+  imagePickerTarget = "subpage";
+  selectedImagePath = subpageImageInput.value || null;
+  imageSearchInput.value = "";
+
+  renderImagePickerList();
+
+  if (selectedImagePath) {
+    updateImagePickerSelection(selectedImagePath);
+  } else {
+    imagePickerPreview.src = getDefaultTileImagePath();
+    imagePickerFileName.textContent = "No image selected";
+    selectImageButton.disabled = true;
+  }
+
+  imagePickerDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    imageSearchInput.focus();
+  });
+}
+
 function openImagePickerDialog() {
   selectedImagePath = tileThumbnailInput.value || null;
   imageSearchInput.value = "";
+  imagePickerTarget = "tile";
 
   renderImagePickerList();
 
@@ -803,8 +994,13 @@ function applySelectedImage() {
     return;
   }
 
-  tileThumbnailInput.value = selectedImagePath;
-  tileThumbnailPreview.src = getImagePath(selectedImagePath);
+  if (imagePickerTarget === "subpage") {
+    subpageImageInput.value = selectedImagePath;
+    subpageImagePreview.src = getImagePath(selectedImagePath);
+  } else {
+    tileThumbnailInput.value = selectedImagePath;
+    tileThumbnailPreview.src = getImagePath(selectedImagePath);
+  }
 
   closeImagePickerDialog();
 }
@@ -900,7 +1096,7 @@ async function moveSelectedItem(direction) {
     destinationIndex,
   );
 
-  await saveWorkingProjectData(project.toObject()); 
+  await saveWorkingProjectData(project.toObject());
 
   showSelectedContainer(selectedContainerId);
   selectLayoutEntry(result.newIndex);
@@ -1105,6 +1301,7 @@ messageDialogOkButton.addEventListener("click", () => {
   messageDialog.close();
 });
 addTileButton.addEventListener("click", openAddTileDialog);
+editItemButton.addEventListener("click", openEditItemDialog);
 tileTypeSelect.addEventListener("change", updateTileDestinationField);
 addSeparatorButton.addEventListener("click", openAddSeparatorDialog);
 addSeparatorForm.addEventListener("submit", createSeparator);
@@ -1113,6 +1310,7 @@ addSeparatorDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
   closeAddSeparatorDialog();
 });
+changeSubpageImageButton.addEventListener("click", openSubpageImagePickerDialog);
 cancelAddTileButton.addEventListener("click", closeAddTileDialog);
 addTileDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
