@@ -12,12 +12,15 @@ import { loadWorkingProjectData } from "./project/project-storage.js";
 const TEACHER_PASSWORD = "class";
 const DEFAULT_COLUMNS = 8;
 const PASSWORD_ERROR_DURATION = 1000;
+const DATA_CHECK_INTERVAL = 60000;
+const DATA_URL = "assets/data/data.js";
 const isPreview = new URLSearchParams(window.location.search).get("preview") === "true";
 
 let project = null;
 let currentContainerId = null;
 let messageTimerId = null;
 let passwordErrorTimerId = null;
+let publishedDataETag = null;
 
 const elements = {
   pageTitle: document.getElementById("pageTitle"),
@@ -50,9 +53,7 @@ const elements = {
 async function initialize() {
   try {
     const isPreview = new URLSearchParams(window.location.search).get("preview") === "true";
-    const workingProjectData = isPreview
-    ? await loadWorkingProjectData()
-    : null;
+    const workingProjectData = isPreview ? await loadWorkingProjectData() : null;
 
     project = workingProjectData ? new ProjectModel(workingProjectData) : await loadProject();
   } catch (error) {
@@ -333,6 +334,54 @@ function showMessage(message) {
   }, 4000);
 }
 
+/* =========================================================
+   ETag into published data
+   ========================================================= */
+
+async function getPublishedDataETag() {
+  const response = await fetch(DATA_URL, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Unable to check classroom updates (${response.status}).`);
+  }
+
+  return response.headers.get("etag");
+}
+
+async function watchForPublishedUpdates() {
+  if (isPreview) {
+    return;
+  }
+
+  try {
+    publishedDataETag = await getPublishedDataETag();
+  } catch (error) {
+    console.warn(error);
+    return;
+  }
+
+  window.setInterval(async () => {
+    try {
+      const latestETag = await getPublishedDataETag();
+
+      if (publishedDataETag && latestETag && latestETag !== publishedDataETag) {
+        console.info("Updated classroom detected. Reloading...");
+        window.location.reload();
+      }
+
+      publishedDataETag = latestETag;
+    } catch (error) {
+      console.warn(error);
+    }
+  }, DATA_CHECK_INTERVAL);
+}
+
+/* =========================================================
+   Event Listeners
+   ========================================================= */
+
 elements.homeButton.addEventListener("click", navigateHome);
 elements.backButton.addEventListener("click", navigateBack);
 elements.teacherButton.addEventListener("click", () => {
@@ -368,3 +417,4 @@ elements.pdfModal.addEventListener("click", (event) => {
 });
 
 void initialize();
+void watchForPublishedUpdates();
