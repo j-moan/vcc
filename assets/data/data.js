@@ -29,17 +29,17 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
+          "type": "section",
+          "label": "seperation",
+          "active": true
+        },
+        {
           "id": "movement-video",
           "type": "video",
           "label": "Movement",
           "image": "movement.jpg",
           "target": "M7lc1UVf-VE",
-          "active": true
-        },
-        {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
           "active": true
         },
         {
