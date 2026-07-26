@@ -50,7 +50,9 @@ const elements = {
 async function initialize() {
   try {
     const isPreview = new URLSearchParams(window.location.search).get("preview") === "true";
-    const workingProjectData = isPreview ? loadWorkingProjectData() : null;
+    const workingProjectData = isPreview
+    ? await loadWorkingProjectData()
+    : null;
 
     project = workingProjectData ? new ProjectModel(workingProjectData) : await loadProject();
   } catch (error) {

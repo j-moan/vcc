@@ -3,29 +3,28 @@
 const WORKING_PROJECT_STORAGE_KEY = "vcc.workingProject";
 const PUBLISHED_PROJECT_STORAGE_KEY = "vcc.publishedProject";
 
-export function loadWorkingProjectData() {
-  const workingProject = window.localStorage.getItem(WORKING_PROJECT_STORAGE_KEY);
+export async function loadWorkingProjectData() {
+  const response = await fetch("/api/project");
 
-  if (!workingProject) {
-    return null;
+  if (!response.ok) {
+    throw new Error("Unable to load the working project.");
   }
 
-  try {
-    return JSON.parse(workingProject);
-  } catch (error) {
-    console.error("Stored teacher project could not be parsed.", error);
-    return null;
-  }
+  return await response.json();
 }
 
-export function saveWorkingProjectData(projectData) {
-  if (!projectData || typeof projectData !== "object") {
-    throw new Error("Teacher project data must be an object.");
+export async function saveWorkingProjectData(projectData) {
+  const response = await fetch("/api/project", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(projectData)
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to save the working project.");
   }
-
-  const serializedProject = JSON.stringify(projectData);
-
-  window.localStorage.setItem(WORKING_PROJECT_STORAGE_KEY, serializedProject);
 }
 
 export function clearWorkingProjectData() {

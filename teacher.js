@@ -68,14 +68,14 @@ let assetsFolderHandle = null;
 
 async function initializeTeacherView() {
   try {
-    const workingProjectData = loadWorkingProjectData();
+    const workingProjectData = await loadWorkingProjectData();
 
     if (workingProjectData) {
       project = new ProjectModel(workingProjectData);
     } else {
       project = await loadProject();
 
-      saveWorkingProjectData(project.toObject());
+      await saveWorkingProjectData(project.toObject());
     }
 
     const tree = project.getContainerTree();
@@ -353,7 +353,7 @@ function closeAddSubpageDialog() {
   }
 }
 
-function createSubpage(event) {
+async function createSubpage(event) {
   event.preventDefault();
 
   const pageName = subpageNameInput.value.trim();
@@ -365,7 +365,7 @@ function createSubpage(event) {
   if (renamingPage) {
     project.renameContainer(selectedContainerId, pageName);
 
-    saveWorkingProjectData(project.toObject());
+    await saveWorkingProjectData(project.toObject());
 
     renderContainerTree(project.getContainerTree());
 
@@ -383,7 +383,7 @@ function createSubpage(event) {
       navigationImage: "",
     });
 
-    saveWorkingProjectData(project.toObject());
+    await saveWorkingProjectData(project.toObject());
 
     renderContainerTree(project.getContainerTree());
     selectContainer(newContainerId);
@@ -450,7 +450,7 @@ async function deleteSelectedPage() {
 
     const parentId = project.deleteContainer(selectedContainerId);
 
-    saveWorkingProjectData(project.toObject());
+    await saveWorkingProjectData(project.toObject());
 
     renderContainerTree(project.getContainerTree());
     selectContainer(parentId);
@@ -499,7 +499,7 @@ function closeAddSeparatorDialog() {
   }
 }
 
-function createSeparator(event) {
+async function createSeparator(event) {
   event.preventDefault();
 
   if (!selectedContainerId) {
@@ -528,7 +528,7 @@ function createSeparator(event) {
     selectedLayoutIndex,
   );
 
-  saveWorkingProjectData(project.toObject());
+  await saveWorkingProjectData(project.toObject());
 
   showSelectedContainer(selectedContainerId);
   selectLayoutEntry(newLayoutIndex);
@@ -544,7 +544,7 @@ function createSeparatorId() {
   return `section-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function createTile(event) {
+async function createTile(event) {
   event.preventDefault();
 
   if (!selectedContainerId) {
@@ -580,7 +580,7 @@ function createTile(event) {
 
   const newLayoutIndex = project.addLayoutEntry(selectedContainerId, tile, selectedLayoutIndex);
 
-  saveWorkingProjectData(project.toObject());
+  await saveWorkingProjectData(project.toObject());
 
   selectedLayoutIndex = newLayoutIndex;
 
@@ -838,7 +838,7 @@ async function deleteSelectedItem() {
 
   project.deleteLayoutEntry(selectedContainerId, deletedIndex);
 
-  saveWorkingProjectData(project.toObject());
+  await saveWorkingProjectData(project.toObject());
 
   const updatedLayout = project.getLayout(selectedContainerId);
 
@@ -880,7 +880,7 @@ function updateTileDestinationField() {
   tileDestinationLabel.textContent = labels[type] || "Destination:";
 }
 
-function moveSelectedItem(direction) {
+async function moveSelectedItem(direction) {
   if (selectedContainerId === null || selectedLayoutIndex === null) {
     showTeacherMessage("Select a separator, tile, or navigation item to move.");
 
@@ -900,7 +900,7 @@ function moveSelectedItem(direction) {
     destinationIndex,
   );
 
-  saveWorkingProjectData(project.toObject());
+  await saveWorkingProjectData(project.toObject()); 
 
   showSelectedContainer(selectedContainerId);
   selectLayoutEntry(result.newIndex);
@@ -1085,8 +1085,8 @@ async function writeDataFile(assetsFolder, projectData) {
    Event Listeners
    ========================================================= */
 
-previewButton.addEventListener("click", () => {
-  saveWorkingProjectData(project.toObject());
+previewButton.addEventListener("click", async () => {
+  await saveWorkingProjectData(project.toObject());
   window.location.href = "student.html?preview=true";
 });
 addSubpageButton.addEventListener("click", openAddSubpageDialog);
