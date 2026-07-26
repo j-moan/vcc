@@ -20,7 +20,7 @@ let project = null;
 let currentContainerId = null;
 let messageTimerId = null;
 let passwordErrorTimerId = null;
-let publishedDataETag = null;
+let publishedDataVersion = null;
 
 const elements = {
   pageTitle: document.getElementById("pageTitle"),
@@ -338,8 +338,8 @@ function showMessage(message) {
    ETag into published data
    ========================================================= */
 
-async function getPublishedDataETag() {
-  const response = await fetch(DATA_URL, {
+async function getPublishedDataVersion() {
+  const response = await fetch(`${DATA_URL}?check=${Date.now()}`, {
     cache: "no-store",
   });
 
@@ -347,7 +347,7 @@ async function getPublishedDataETag() {
     throw new Error(`Unable to check classroom updates (${response.status}).`);
   }
 
-  return response.headers.get("etag");
+  return response.text();
 }
 
 async function watchForPublishedUpdates() {
@@ -356,24 +356,25 @@ async function watchForPublishedUpdates() {
   }
 
   try {
-    publishedDataETag = await getPublishedDataETag();
+    publishedDataVersion = await getPublishedDataVersion();
   } catch (error) {
-    console.warn(error);
+    console.warn("Classroom update watcher could not start.", error);
     return;
   }
 
   window.setInterval(async () => {
     try {
-      const latestETag = await getPublishedDataETag();
+      const latestVersion = await getPublishedDataVersion();
 
-      if (publishedDataETag && latestETag && latestETag !== publishedDataETag) {
+      if (publishedDataVersion !== null && latestVersion !== publishedDataVersion) {
         console.info("Updated classroom detected. Reloading...");
         window.location.reload();
+        return;
       }
 
-      publishedDataETag = latestETag;
+      publishedDataVersion = latestVersion;
     } catch (error) {
-      console.warn(error);
+      console.warn("Classroom update check failed.", error);
     }
   }, DATA_CHECK_INTERVAL);
 }
