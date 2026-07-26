@@ -3,8 +3,7 @@
 import { ProjectModel, ProjectModelError } from "../models/project-model.js";
 
 export async function loadProject() {
-  const response = await fetch("/api/project");
-  const projectData = await response.json();
+ const projectData = window.CLASSROOM_SITE;
 
   if (!projectData) {
     throw new ProjectLoadError("PROJECT_NOT_FOUND", "No classroom project data was found.");
