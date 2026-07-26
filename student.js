@@ -340,7 +340,11 @@ function showMessage(message) {
 
 async function getPublishedDataVersion() {
   const response = await fetch(`${DATA_URL}?check=${Date.now()}`, {
-    cache: "no-store",
+    cache: "no-cache",
+    headers: {
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+    },
   });
 
   if (!response.ok) {
