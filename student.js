@@ -338,7 +338,7 @@ function showMessage(message) {
    ETag into published data
    ========================================================= */
 
-async function getPublishedDataVersion() {
+async function getPublishedProjectData() {
   const response = await fetch(`${DATA_URL}?check=${Date.now()}`, {
     cache: "no-cache",
     headers: {
@@ -351,7 +351,23 @@ async function getPublishedDataVersion() {
     throw new Error(`Unable to check classroom updates (${response.status}).`);
   }
 
-  return response.text();
+  const fileContents = await response.text();
+  const marker = "window.CLASSROOM_SITE =";
+  const markerIndex = fileContents.indexOf(marker);
+
+  if (markerIndex === -1) {
+    throw new Error("Published classroom data is invalid.");
+  }
+
+  const jsonText = fileContents
+    .substring(markerIndex + marker.length)
+    .trim()
+    .replace(/;$/, "");
+
+  return {
+    fileContents,
+    projectData: JSON.parse(jsonText),
+  };
 }
 
 async function watchForPublishedUpdates() {
@@ -359,8 +375,11 @@ async function watchForPublishedUpdates() {
     return;
   }
 
+  let publishedFileContents;
+
   try {
-    publishedDataVersion = await getPublishedDataVersion();
+    const initialResult = await getPublishedProjectData();
+    publishedFileContents = initialResult.fileContents;
   } catch (error) {
     console.warn("Classroom update watcher could not start.", error);
     return;
@@ -368,15 +387,24 @@ async function watchForPublishedUpdates() {
 
   window.setInterval(async () => {
     try {
-      const latestVersion = await getPublishedDataVersion();
+      const latestResult = await getPublishedProjectData();
 
-      if (publishedDataVersion !== null && latestVersion !== publishedDataVersion) {
-        console.info("Updated classroom detected. Reloading...");
-        window.location.reload();
+      if (latestResult.fileContents === publishedFileContents) {
         return;
       }
 
-      publishedDataVersion = latestVersion;
+      publishedFileContents = latestResult.fileContents;
+
+      project = new ProjectModel(latestResult.projectData);
+
+      const destinationContainerId = project.getContainer(currentContainerId)
+        ? currentContainerId
+        : project.startContainerId;
+
+      navigateToContainer(destinationContainerId);
+
+      console.info("Updated classroom content loaded.");
+      showMessage("Classroom Updated");
     } catch (error) {
       console.warn("Classroom update check failed.", error);
     }
