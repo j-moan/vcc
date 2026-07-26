@@ -22,12 +22,6 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
-          "active": true
-        },
-        {
           "id": "nav-math",
           "type": "navigation",
           "container": "math",
@@ -40,6 +34,12 @@ window.CLASSROOM_SITE = {
           "label": "Movement",
           "image": "movement.jpg",
           "target": "M7lc1UVf-VE",
+          "active": true
+        },
+        {
+          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
+          "type": "section",
+          "label": "seperation",
           "active": true
         },
         {
