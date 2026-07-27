@@ -65,13 +65,16 @@ app.put("/api/project", (req, res) => {
 
 app.post("/api/catalog-assets", (req, res) => {
   try {
-    writeCatalog("images");
-    writeCatalog("pdfs");
-    writeCatalog("powerpoints");
-    writeCatalog("videos");
+    const catalogs = {
+      images: writeCatalog("images"),
+      pdfs: writeCatalog("pdfs"),
+      powerpoints: writeCatalog("powerpoints"),
+      videos: writeCatalog("videos"),
+    };
 
     res.json({
       status: "ok",
+      catalogs,
     });
   } catch (error) {
     console.error(error);
@@ -152,9 +155,7 @@ function buildCatalog(folderPath) {
 
 function writeCatalog(folderName) {
   const folderPath = path.join("/srv/vcc/assets", folderName);
-
   const files = buildCatalog(folderPath);
-
   const globalName = `CLASSROOM_${folderName.toUpperCase()}`;
 
   const contents = `"use strict";
@@ -163,6 +164,8 @@ window.${globalName} = ${JSON.stringify(files, null, 2)};
 `;
 
   fs.writeFileSync(path.join(folderPath, "catalog.js"), contents, "utf8");
+
+  return files;
 }
 
 app.listen(PORT, () => {

@@ -1277,10 +1277,21 @@ toolbarButtons.forEach((button) => {
 
 catalogAssetsButton.addEventListener("click", async () => {
   try {
-    await catalogAssets();
+    const result = await catalogAssets();
+
+    window.CLASSROOM_IMAGES = result.catalogs.images;
+    window.CLASSROOM_PDFS = result.catalogs.pdfs;
+    window.CLASSROOM_POWERPOINTS = result.catalogs.powerpoints;
+    window.CLASSROOM_VIDEOS = result.catalogs.videos;
+
     showTeacherMessage("The classroom library has been updated successfully.", "Library Updated");
   } catch (error) {
-    console.error(error);
+    console.error("Library update failed.", error);
+
+    showTeacherMessage(
+      error.message || "The classroom library could not be updated.",
+      "Library Update Failed",
+    );
   }
 });
 
