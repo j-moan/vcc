@@ -10,7 +10,6 @@ window.CLASSROOM_SITE = {
       "active": true,
       "children": [
         "morning-meeting",
-        "reading",
         "math",
         "relaxing-videos"
       ],
@@ -102,23 +101,6 @@ window.CLASSROOM_SITE = {
           "label": "null test",
           "image": "",
           "target": "",
-          "active": true
-        }
-      ]
-    },
-    "reading": {
-      "title": "Reading",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [],
-      "layout": [
-        {
-          "id": "tile-478600eb-2d2e-4f45-9000-1c6e20be7e34",
-          "type": "pdf",
-          "label": "Brown Bear",
-          "image": "cover brown bear.jpg",
-          "target": "brown-bear-bk.pdf",
           "active": true
         }
       ]
