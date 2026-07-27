@@ -232,7 +232,7 @@ function submitTeacherPassword(event) {
     enteredPassword.toLocaleLowerCase() === TEACHER_PASSWORD.toLocaleLowerCase();
 
   if (passwordMatches) {
-    window.location.href = "teacher.html";
+    window.location.href = "http://192.168.1.15/teacher.html";
     return;
   }
 
@@ -434,7 +434,7 @@ elements.teacherButton.addEventListener("click", () => {
   }
 
   if (isPreview) {
-    window.location.href = "teacher.html";
+    window.location.href = "http://192.168.1.15/teacher.html";
     return;
   }
 
