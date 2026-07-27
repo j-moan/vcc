@@ -1246,9 +1246,17 @@ publishButton.addEventListener("click", async () => {
 
     const result = await publishProject();
 
-    console.log(
-      result.status === "no-changes" ? "Nothing new to publish." : "Classroom site published.",
-    );
+    if (result.status === "no-changes") {
+      showTeacherMessage(
+        "No changes were detected. The classroom website is already up to date.",
+        "Nothing to Publish",
+      );
+    } else {
+      showTeacherMessage(
+        "The classroom website has been published successfully. Public pages will update automatically within about five minutes.",
+        "Publish Complete",
+      );
+    }
   } catch (error) {
     console.error("Publish failed.", error);
     showTeacherMessage(
@@ -1270,7 +1278,7 @@ toolbarButtons.forEach((button) => {
 catalogAssetsButton.addEventListener("click", async () => {
   try {
     await catalogAssets();
-    console.log("Asset catalogs updated.");
+    showTeacherMessage("The classroom library has been updated successfully.", "Library Updated");
   } catch (error) {
     console.error(error);
   }

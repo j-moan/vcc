@@ -180,7 +180,7 @@ function updateHeader(container) {
 function updateNavigationButtons(container) {
   const isHome = currentContainerId === project.startContainerId;
 
-  elements.teacherButton.hidden = !isHome;
+  elements.teacherButton.hidden = !isHome || !isLocalTeacherAccess();
   elements.homeButton.hidden = isHome;
   elements.backButton.hidden = isHome || !container.parent;
 }
@@ -274,6 +274,17 @@ function clearPasswordErrorTimer() {
 
   window.clearTimeout(passwordErrorTimerId);
   passwordErrorTimerId = null;
+}
+
+function isLocalTeacherAccess() {
+  const hostname = window.location.hostname.toLowerCase();
+
+  return (
+    hostname === "192.168.1.15" ||
+    hostname === "vcc-server" ||
+    hostname === "localhost" ||
+    hostname === "127.0.0.1"
+  );
 }
 
 /* =========================================================
@@ -418,6 +429,10 @@ async function watchForPublishedUpdates() {
 elements.homeButton.addEventListener("click", navigateHome);
 elements.backButton.addEventListener("click", navigateBack);
 elements.teacherButton.addEventListener("click", () => {
+  if (!isLocalTeacherAccess()) {
+    return;
+  }
+
   if (isPreview) {
     window.location.href = "teacher.html";
     return;
