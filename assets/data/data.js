@@ -11,7 +11,8 @@ window.CLASSROOM_SITE = {
       "children": [
         "morning-meeting",
         "reading",
-        "math"
+        "math",
+        "relaxing-videos"
       ],
       "layout": [
         {
@@ -22,16 +23,16 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
+          "type": "section",
+          "label": "seperation",
+          "active": true
+        },
+        {
           "id": "nav-math",
           "type": "navigation",
           "container": "math",
           "image": "math.jpg",
-          "active": true
-        },
-        {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
           "active": true
         },
         {
@@ -49,6 +50,11 @@ window.CLASSROOM_SITE = {
           "image": "reading.jpg",
           "target": "",
           "active": true
+        },
+        {
+          "type": "navigation",
+          "container": "relaxing-videos",
+          "image": ""
         }
       ]
     },
@@ -194,6 +200,23 @@ window.CLASSROOM_SITE = {
       "active": true,
       "children": [],
       "layout": []
+    },
+    "relaxing-videos": {
+      "title": "Relaxing Videos",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1785115273362-185621d5a9923",
+          "type": "video",
+          "label": "Snoopy Pool Jazz",
+          "image": "octopus.jpg",
+          "target": "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
+          "active": true
+        }
+      ]
     }
   }
 };

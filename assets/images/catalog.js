@@ -8,5 +8,6 @@ window.CLASSROOM_IMAGES = [
   "morning-meeting.jpg",
   "movement.jpg",
   "octopus.jpg",
-  "reading.jpg"
+  "reading.jpg",
+  "snoopy summer pool.jpg"
 ];
