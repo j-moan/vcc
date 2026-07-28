@@ -22,16 +22,16 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
-          "id": "section-2873ecbd-8a3f-49c2-9dc1-93bac71480f5",
-          "type": "section",
-          "label": "seperation",
-          "active": true
-        },
-        {
           "id": "nav-math",
           "type": "navigation",
           "container": "math",
           "image": "math.jpg",
+          "active": true
+        },
+        {
+          "id": "section-1785203463355-90b18c247f7028",
+          "type": "section",
+          "label": "line of text",
           "active": true
         },
         {
@@ -164,6 +164,14 @@ window.CLASSROOM_SITE = {
           "image": "hello-song.jpg",
           "target": "https://www.youtube.com/watch?v=yIx1DplJMB4",
           "active": true
+        },
+        {
+          "id": "tile-1785117232745-df8ee059d2b96",
+          "type": "video",
+          "label": "numbers song",
+          "image": "numbers song cover.jpg",
+          "target": "https://www.youtube.com/watch?v=D0Ajq682yrA&list=RDD0Ajq682yrA&start_radio=1",
+          "active": true
         }
       ]
     },
@@ -194,7 +202,7 @@ window.CLASSROOM_SITE = {
           "id": "tile-1785115273362-185621d5a9923",
           "type": "video",
           "label": "Snoopy Pool Jazz",
-          "image": "octopus.jpg",
+          "image": "snoopy summer pool.jpg",
           "target": "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
           "active": true
         }
