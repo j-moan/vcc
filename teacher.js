@@ -346,14 +346,14 @@ function showTreeMessage(message) {
 
 function openAddSeparatorDialog() {
   if (!selectedContainerId) {
-    showTeacherMessage("Select a page before adding a separator.");
+    showTeacherMessage("Select a page before adding a secetion heading.");
     return;
   }
 
   editingSeparator = false;
 
-  addSeparatorDialogTitle.textContent = "Add Separator";
-  addSeparatorSubmitButton.textContent = "Add Separator";
+  addSeparatorDialogTitle.textContent = "Add Section";
+  addSeparatorSubmitButton.textContent = "Add Section";
 
   separatorNameInput.value = "";
   addSeparatorDialog.showModal();
@@ -366,7 +366,7 @@ function openAddSeparatorDialog() {
 function openEditSeparatorDialog(entry) {
   editingSeparator = true;
 
-  addSeparatorDialogTitle.textContent = "Edit Separator";
+  addSeparatorDialogTitle.textContent = "Edit Section";
   addSeparatorSubmitButton.textContent = "Save Changes";
 
   separatorNameInput.value = entry.label || "";
@@ -622,21 +622,21 @@ async function createSeparator(event) {
   event.preventDefault();
 
   if (!selectedContainerId) {
-    showTeacherMessage("Select a page before adding a separator.");
+    showTeacherMessage("Select a page before adding a section heading.");
     return;
   }
 
   const label = separatorNameInput.value.trim();
 
   if (!label) {
-    showTeacherMessage("Enter a name for the separator.");
+    showTeacherMessage("Enter a name for the section.");
     separatorNameInput.focus();
     return;
   }
 
   if (editingSeparator) {
     if (selectedLayoutIndex === null) {
-      showTeacherMessage("The selected separator could not be found.");
+      showTeacherMessage("The selected section heading could not be found.");
       return;
     }
 
@@ -1011,7 +1011,7 @@ function applySelectedImage() {
 
 async function deleteSelectedItem() {
   if (selectedContainerId === null || selectedLayoutIndex === null) {
-    showTeacherMessage("Select a separator or tile to delete.");
+    showTeacherMessage("Select a section heading or tile to delete.");
 
     return;
   }
@@ -1082,7 +1082,7 @@ function updateTileDestinationField() {
 
 async function moveSelectedItem(direction) {
   if (selectedContainerId === null || selectedLayoutIndex === null) {
-    showTeacherMessage("Select a separator, tile, or navigation item to move.");
+    showTeacherMessage("Select a section heading, tile, or navigation item to move.");
 
     return;
   }
