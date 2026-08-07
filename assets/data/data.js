@@ -1,212 +1,203 @@
 "use strict";
 
 window.CLASSROOM_SITE = {
-  "startContainer": "home",
-  "containers": {
-    "home": {
-      "title": "Ms. Campbell's Classroom",
-      "subtitle": "Choose an activity",
-      "parent": null,
-      "active": true,
-      "children": [
-        "morning-meeting",
-        "math",
-        "relaxing-videos"
+  startContainer: "home",
+  containers: {
+    home: {
+      title: "Visual Communication for the Classroom",
+      subtitle: "Choose an activity",
+      parent: null,
+      active: true,
+      children: ["morning-meeting", "math", "relaxing-videos"],
+      layout: [
+        {
+          id: "nav-morning-meeting",
+          type: "navigation",
+          container: "morning-meeting",
+          image: "morning-meeting.jpg",
+          active: true,
+        },
+        {
+          id: "nav-math",
+          type: "navigation",
+          container: "math",
+          image: "math.jpg",
+          active: true,
+        },
+        {
+          id: "section-1785203463355-90b18c247f7028",
+          type: "section",
+          label: "line of text",
+          active: true,
+        },
+        {
+          id: "movement-video",
+          type: "video",
+          label: "Movement",
+          image: "movement.jpg",
+          target: "M7lc1UVf-VE",
+          active: true,
+        },
+        {
+          id: "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
+          type: "placeholder",
+          label: "picture test",
+          image: "reading.jpg",
+          target: "",
+          active: true,
+        },
+        {
+          type: "navigation",
+          container: "relaxing-videos",
+          image: "",
+        },
       ],
-      "layout": [
-        {
-          "id": "nav-morning-meeting",
-          "type": "navigation",
-          "container": "morning-meeting",
-          "image": "morning-meeting.jpg",
-          "active": true
-        },
-        {
-          "id": "nav-math",
-          "type": "navigation",
-          "container": "math",
-          "image": "math.jpg",
-          "active": true
-        },
-        {
-          "id": "section-1785203463355-90b18c247f7028",
-          "type": "section",
-          "label": "line of text",
-          "active": true
-        },
-        {
-          "id": "movement-video",
-          "type": "video",
-          "label": "Movement",
-          "image": "movement.jpg",
-          "target": "M7lc1UVf-VE",
-          "active": true
-        },
-        {
-          "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
-          "type": "placeholder",
-          "label": "picture test",
-          "image": "reading.jpg",
-          "target": "",
-          "active": true
-        },
-        {
-          "type": "navigation",
-          "container": "relaxing-videos",
-          "image": ""
-        }
-      ]
     },
     "morning-meeting": {
-      "title": "Morning Meeting",
-      "subtitle": "Choose a morning activity",
-      "parent": "home",
-      "active": true,
-      "children": [
-        "calendar"
+      title: "Morning Meeting",
+      subtitle: "Choose a morning activity",
+      parent: "home",
+      active: true,
+      children: ["calendar"],
+      layout: [
+        {
+          id: "section-songs",
+          type: "section",
+          label: "Songs and Activities",
+          active: true,
+        },
+        {
+          id: "hello-song",
+          type: "video",
+          label: "Hello Song",
+          image: "hello-song.jpg",
+          target: "M7lc1UVf-VE",
+          active: true,
+        },
+        {
+          id: "nav-calendar",
+          type: "navigation",
+          container: "calendar",
+          image: "calendar.jpg",
+          active: true,
+        },
+        {
+          id: "tile-25fd7fe9-ccee-424d-bfb0-8250b3800912",
+          type: "information",
+          label: "helloo song message",
+          image: "hello-song.jpg",
+          target: "hello i am working :-)",
+          active: true,
+        },
+        {
+          id: "tile-65c5b1e9-dc03-4644-b15e-3ffc8f17ff75",
+          type: "placeholder",
+          label: "null test",
+          image: "",
+          target: "",
+          active: true,
+        },
       ],
-      "layout": [
-        {
-          "id": "section-songs",
-          "type": "section",
-          "label": "Songs and Activities",
-          "active": true
-        },
-        {
-          "id": "hello-song",
-          "type": "video",
-          "label": "Hello Song",
-          "image": "hello-song.jpg",
-          "target": "M7lc1UVf-VE",
-          "active": true
-        },
-        {
-          "id": "nav-calendar",
-          "type": "navigation",
-          "container": "calendar",
-          "image": "calendar.jpg",
-          "active": true
-        },
-        {
-          "id": "tile-25fd7fe9-ccee-424d-bfb0-8250b3800912",
-          "type": "information",
-          "label": "helloo song message",
-          "image": "hello-song.jpg",
-          "target": "hello i am working :-)",
-          "active": true
-        },
-        {
-          "id": "tile-65c5b1e9-dc03-4644-b15e-3ffc8f17ff75",
-          "type": "placeholder",
-          "label": "null test",
-          "image": "",
-          "target": "",
-          "active": true
-        }
-      ]
     },
-    "math": {
-      "title": "Math",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [
-        "math-videos",
-        "math-documents",
-        "math-images"
+    math: {
+      title: "Math",
+      subtitle: "",
+      parent: "home",
+      active: true,
+      children: ["math-videos", "math-documents", "math-images"],
+      layout: [
+        {
+          type: "navigation",
+          container: "math-videos",
+          image: "",
+        },
+        {
+          type: "navigation",
+          container: "math-documents",
+          image: "calendar.jpg",
+        },
+        {
+          type: "navigation",
+          container: "math-images",
+          image: "",
+        },
       ],
-      "layout": [
-        {
-          "type": "navigation",
-          "container": "math-videos",
-          "image": ""
-        },
-        {
-          "type": "navigation",
-          "container": "math-documents",
-          "image": "calendar.jpg"
-        },
-        {
-          "type": "navigation",
-          "container": "math-images",
-          "image": ""
-        }
-      ]
     },
-    "calendar": {
-      "title": "Calendar",
-      "subtitle": "",
-      "parent": "morning-meeting",
-      "active": true,
-      "children": [],
-      "layout": [
+    calendar: {
+      title: "Calendar",
+      subtitle: "",
+      parent: "morning-meeting",
+      active: true,
+      children: [],
+      layout: [
         {
-          "id": "tile-b1691105-14d2-4aa4-b46a-f4479374b7dc",
-          "type": "information",
-          "label": "octopus test",
-          "image": "octopus.jpg",
-          "target": "happy swimming",
-          "active": true
-        }
-      ]
+          id: "tile-b1691105-14d2-4aa4-b46a-f4479374b7dc",
+          type: "information",
+          label: "octopus test",
+          image: "octopus.jpg",
+          target: "happy swimming",
+          active: true,
+        },
+      ],
     },
     "math-videos": {
-      "title": "math videos",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": [
+      title: "math videos",
+      subtitle: "",
+      parent: "math",
+      active: true,
+      children: [],
+      layout: [
         {
-          "id": "tile-65874ac0-2481-464b-87d8-b1df4baa54b7",
-          "type": "video",
-          "label": "video added",
-          "image": "hello-song.jpg",
-          "target": "https://www.youtube.com/watch?v=yIx1DplJMB4",
-          "active": true
+          id: "tile-65874ac0-2481-464b-87d8-b1df4baa54b7",
+          type: "video",
+          label: "video added",
+          image: "hello-song.jpg",
+          target: "https://www.youtube.com/watch?v=yIx1DplJMB4",
+          active: true,
         },
         {
-          "id": "tile-1785117232745-df8ee059d2b96",
-          "type": "video",
-          "label": "numbers song",
-          "image": "numbers song cover.jpg",
-          "target": "https://www.youtube.com/watch?v=D0Ajq682yrA&list=RDD0Ajq682yrA&start_radio=1",
-          "active": true
-        }
-      ]
+          id: "tile-1785117232745-df8ee059d2b96",
+          type: "video",
+          label: "numbers song",
+          image: "numbers song cover.jpg",
+          target: "https://www.youtube.com/watch?v=D0Ajq682yrA&list=RDD0Ajq682yrA&start_radio=1",
+          active: true,
+        },
+      ],
     },
     "math-images": {
-      "title": "math imageing",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": []
+      title: "math imageing",
+      subtitle: "",
+      parent: "math",
+      active: true,
+      children: [],
+      layout: [],
     },
     "math-documents": {
-      "title": "math documenting",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": []
+      title: "math documenting",
+      subtitle: "",
+      parent: "math",
+      active: true,
+      children: [],
+      layout: [],
     },
     "relaxing-videos": {
-      "title": "Relaxing Videos",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [],
-      "layout": [
+      title: "Relaxing Videos",
+      subtitle: "",
+      parent: "home",
+      active: true,
+      children: [],
+      layout: [
         {
-          "id": "tile-1785115273362-185621d5a9923",
-          "type": "video",
-          "label": "Snoopy Pool Jazz",
-          "image": "snoopy summer pool.jpg",
-          "target": "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
-          "active": true
-        }
-      ]
-    }
-  }
+          id: "tile-1785115273362-185621d5a9923",
+          type: "video",
+          label: "Snoopy Pool Jazz",
+          image: "snoopy summer pool.jpg",
+          target:
+            "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
+          active: true,
+        },
+      ],
+    },
+  },
 };
