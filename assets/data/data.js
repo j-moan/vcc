@@ -113,7 +113,8 @@ window.CLASSROOM_SITE = {
       "children": [
         "math-videos",
         "math-documents",
-        "math-images"
+        "math-images",
+        "math-web-link"
       ],
       "layout": [
         {
@@ -130,6 +131,11 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "math-images",
           "image": ""
+        },
+        {
+          "type": "navigation",
+          "container": "math-web-link",
+          "image": "snoopy summer pool.jpg"
         }
       ]
     },
@@ -181,7 +187,16 @@ window.CLASSROOM_SITE = {
       "parent": "math",
       "active": true,
       "children": [],
-      "layout": []
+      "layout": [
+        {
+          "id": "tile-1786067079803-f28e92ae6e4e08",
+          "type": "image",
+          "label": "image test",
+          "image": "octopus.jpg",
+          "target": "reading.jpg",
+          "active": true
+        }
+      ]
     },
     "math-documents": {
       "title": "math documenting",
@@ -204,6 +219,23 @@ window.CLASSROOM_SITE = {
           "label": "Snoopy Pool Jazz",
           "image": "snoopy summer pool.jpg",
           "target": "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
+          "active": true
+        }
+      ]
+    },
+    "math-web-link": {
+      "title": "math web link",
+      "subtitle": "",
+      "parent": "math",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1786067763698-ae46dc5b1bb718",
+          "type": "website",
+          "label": "weather.com",
+          "image": "movement.jpg",
+          "target": "https://weather.com/",
           "active": true
         }
       ]
