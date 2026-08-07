@@ -35,6 +35,11 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "type": "navigation",
+          "container": "relaxing-videos",
+          "image": ""
+        },
+        {
           "id": "movement-video",
           "type": "video",
           "label": "Movement",
@@ -49,11 +54,6 @@ window.CLASSROOM_SITE = {
           "image": "reading.jpg",
           "target": "",
           "active": true
-        },
-        {
-          "type": "navigation",
-          "container": "relaxing-videos",
-          "image": ""
         }
       ]
     },
