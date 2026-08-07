@@ -110,12 +110,16 @@ app.post("/api/publish", (req, res) => {
       encoding: "utf8",
     });
 
-    const changes = execFileSync("git", ["status", "--porcelain"], {
-      cwd: REPOSITORY_PATH,
-      encoding: "utf8",
-    }).trim();
+    const stagedAssetChanges = execFileSync(
+      "git",
+      ["diff", "--cached", "--name-only", "--", "assets"],
+      {
+        cwd: REPOSITORY_PATH,
+        encoding: "utf8",
+      },
+    ).trim();
 
-    if (!changes) {
+    if (!stagedAssetChanges) {
       return res.json({
         status: "no-changes",
       });

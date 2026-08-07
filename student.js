@@ -6,6 +6,7 @@ import { validateAssets } from "./validators/asset-validator.js";
 import { loadProject, ProjectLoadError } from "./project/project-loader.js";
 import { openVideo, closeVideo } from "./actions/video-action.js";
 import { openPdf, closePdf } from "./actions/pdf-action.js";
+import { getImagePath } from "./utilities/asset-paths.js";
 import { ProjectModel } from "./models/project-model.js";
 import { loadWorkingProjectData } from "./project/project-storage.js";
 
@@ -46,6 +47,11 @@ const elements = {
   pdfTitle: document.getElementById("pdfTitle"),
   pdfFrame: document.getElementById("pdfFrame"),
   closePdfButton: document.getElementById("closePdfButton"),
+
+  imageModal: document.getElementById("imageModal"),
+  imageTitle: document.getElementById("imageTitle"),
+  fullScreenImage: document.getElementById("fullScreenImage"),
+  closeImageButton: document.getElementById("closeImageButton"),
 
   messageBox: document.getElementById("messageBox"),
 };
@@ -298,9 +304,9 @@ function handleContentAction(entry) {
         showMessage(error.message);
       });
       break;
-    case "information":
-      break;
     case "website":
+      openWebsite(entry);
+      break;
     case "pdf":
       try {
         openPdf(entry, elements);
@@ -308,15 +314,48 @@ function handleContentAction(entry) {
         showMessage(error.message);
       }
       break;
-    case "powerpoint":
     case "image":
-      showMessage(`${getEntryLabel(entry)} selected.`);
+      openImage(entry);
       break;
     case "placeholder":
       break;
     default:
       showMessage(`Unsupported content type: ${entry.type}`);
   }
+}
+
+function openWebsite(entry) {
+  const url = entry.target?.trim();
+
+  if (!url) {
+    showMessage("This website is not available.");
+    return;
+  }
+
+  const normalizedUrl =
+    url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`;
+
+  window.open(normalizedUrl, "_blank", "noopener,noreferrer");
+}
+
+function openImage(entry) {
+  if (!entry.target) {
+    showMessage("This image is not available.");
+    return;
+  }
+
+  const label = getEntryLabel(entry);
+
+  elements.imageTitle.textContent = label;
+  elements.fullScreenImage.src = getImagePath(entry.target);
+  elements.fullScreenImage.alt = label;
+  elements.imageModal.hidden = false;
+}
+
+function closeImage() {
+  elements.imageModal.hidden = true;
+  elements.fullScreenImage.src = "";
+  elements.fullScreenImage.alt = "";
 }
 
 function getEntryLabel(entry) {
@@ -461,6 +500,14 @@ elements.closePdfButton.addEventListener("click", () => {
 elements.pdfModal.addEventListener("click", (event) => {
   if (event.target === elements.pdfModal) {
     closePdf(elements);
+  }
+});
+
+elements.closeImageButton.addEventListener("click", closeImage);
+
+elements.imageModal.addEventListener("click", (event) => {
+  if (event.target === elements.imageModal) {
+    closeImage();
   }
 });
 

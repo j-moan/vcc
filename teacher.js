@@ -820,6 +820,28 @@ function openImagePickerDialog() {
   });
 }
 
+function openTileDestinationImagePickerDialog() {
+  imagePickerTarget = "destination";
+  selectedImagePath = tileDestinationInput.value || null;
+  imageSearchInput.value = "";
+
+  renderImagePickerList();
+
+  if (selectedImagePath) {
+    updateImagePickerSelection(selectedImagePath);
+  } else {
+    imagePickerPreview.src = getDefaultTileImagePath();
+    imagePickerFileName.textContent = "No image selected";
+    selectImageButton.disabled = true;
+  }
+
+  imagePickerDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    imageSearchInput.focus();
+  });
+}
+
 function renderImagePickerList() {
   imagePickerList.replaceChildren();
 
@@ -1001,6 +1023,8 @@ function applySelectedImage() {
   if (imagePickerTarget === "subpage") {
     subpageImageInput.value = selectedImagePath;
     subpageImagePreview.src = getImagePath(selectedImagePath);
+  } else if (imagePickerTarget === "destination") {
+    tileDestinationInput.value = selectedImagePath;
   } else {
     tileThumbnailInput.value = selectedImagePath;
     tileThumbnailPreview.src = getImagePath(selectedImagePath);
@@ -1064,17 +1088,16 @@ function updateTileDestinationField() {
 
   tileDestinationGroup.hidden = false;
   tileDestinationInput.required = true;
-  const usesLocalPicker = type === "pdf";
+  const usesLocalPicker = type === "pdf" || type === "image";
   tileDestinationInput.readOnly = usesLocalPicker;
-  tileDestinationInput.placeholder = usesLocalPicker ? "Click to choose a PDF" : "";
+  tileDestinationInput.placeholder =
+    type === "pdf" ? "Click to choose a PDF" : type === "image" ? "Click to choose an image" : "";
 
   const labels = {
     video: "YouTube URL:",
     website: "Website URL:",
     pdf: "PDF File or URL:",
-    powerpoint: "PowerPoint File or URL:",
-    image: "Image File or URL:",
-    information: "Text:",
+    image: "Image",
   };
 
   tileDestinationLabel.textContent = labels[type] || "Destination:";
@@ -1222,12 +1245,17 @@ imagePickerDialog.addEventListener("cancel", (event) => {
 tileDestinationInput.addEventListener("click", () => {
   if (tileTypeSelect.value === "pdf") {
     openPdfPickerDialog();
+  } else if (tileTypeSelect.value === "image") {
+    openTileDestinationImagePickerDialog();
   }
 });
 tileDestinationInput.addEventListener("keydown", (event) => {
   if (tileTypeSelect.value === "pdf" && (event.key === "Enter" || event.key === " ")) {
     event.preventDefault();
     openPdfPickerDialog();
+  } else if (tileTypeSelect.value === "image" && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    openTileDestinationImagePickerDialog();
   }
 });
 pdfSearchInput.addEventListener("input", renderPdfPickerList);
@@ -1247,22 +1275,15 @@ publishButton.addEventListener("click", async () => {
     const result = await publishProject();
 
     if (result.status === "no-changes") {
-      showTeacherMessage(
-        "No changes were detected. The classroom website is already up to date.",
-        "Nothing to Publish",
-      );
-    } else {
-      showTeacherMessage(
-        "The classroom website has been published successfully. Public pages will update automatically within about five minutes.",
-        "Publish Complete",
-      );
+      showTeacherMessage("The classroom is already up to date.", "Nothing to Publish");
+      return;
     }
+
+    showTeacherMessage("The classroom has been published successfully.", "Publish Complete");
   } catch (error) {
     console.error("Publish failed.", error);
-    showTeacherMessage(
-      error.message || "The classroom site could not be published.",
-      "Publish Failed",
-    );
+
+    showTeacherMessage("The classroom could not be published. Please try again.", "Publish Failed");
   }
 });
 toolbarButtons.forEach((button) => {
