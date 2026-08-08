@@ -12,7 +12,8 @@ window.CLASSROOM_SITE = {
         "relaxing-videos-2",
         "morning-meeting",
         "relaxing-videos",
-        "unique-learning"
+        "unique-learning",
+        "reading"
       ],
       "layout": [
         {
@@ -53,6 +54,11 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "unique-learning",
           "image": "TitleN2YUniqueLearning.jpg"
+        },
+        {
+          "type": "navigation",
+          "container": "reading",
+          "image": "reading.jpg"
         }
       ]
     },
@@ -176,6 +182,39 @@ window.CLASSROOM_SITE = {
           "label": "Follow the Rules",
           "image": "",
           "target": "https://unique.n2y.com/view/unit-lesson/student-material/6855586?hl=1&page=11",
+          "active": true
+        }
+      ]
+    },
+    "reading": {
+      "title": "Reading",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [
+        "brown-bear-brown-bear"
+      ],
+      "layout": [
+        {
+          "type": "navigation",
+          "container": "brown-bear-brown-bear",
+          "image": "TradeBookTitleBrownBear.jpg"
+        }
+      ]
+    },
+    "brown-bear-brown-bear": {
+      "title": "Brown Bear, Brown Bear",
+      "subtitle": "",
+      "parent": "reading",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1786226772170-4f47b794fa2fa",
+          "type": "pdf",
+          "label": "PDF",
+          "image": "TradeBookTitleBrownBear.jpg",
+          "target": "BrownBearBrownBearWhatDoYouSeeInteractiveBookCircleTimeActivity-1.pdf",
           "active": true
         }
       ]

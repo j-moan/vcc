@@ -21,5 +21,6 @@ window.CLASSROOM_IMAGES = [
   "TitleN2YUniqueLearning.jpg",
   "TitleRelaxingFishAquarium.jpg",
   "TitleTimers.jpg",
+  "TradeBookTitleBrownBear.jpg",
   "UnderConstruction.jpg"
 ];
