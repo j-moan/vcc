@@ -1,15 +1,18 @@
 const DEFAULT_TILE_IMAGE_PATH = "resources/default-tile.jpg";
 const DEFAULT_HEADER_IMAGE_PATH = "resources/default-header.jpg";
 
-function isTeacherMode() {
-  return (
+function isWorkingMode() {
+  const isTeacher =
     window.location.pathname.endsWith("/teacher.html") ||
-    window.location.pathname.endsWith("teacher.html")
-  );
+    window.location.pathname.endsWith("teacher.html");
+
+  const isPreview = new URLSearchParams(window.location.search).get("preview") === "true";
+
+  return isTeacher || isPreview;
 }
 
 function getAssetRoot() {
-  return isTeacherMode() ? "/master-assets" : "assets";
+  return isWorkingMode() ? "/master-assets" : "assets";
 }
 
 export function getDefaultTileImagePath() {

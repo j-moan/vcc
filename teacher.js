@@ -1049,6 +1049,14 @@ async function deleteSelectedItem() {
     return;
   }
 
+  if (entry.type === "navigation") {
+    showTeacherMessage(
+      "Navigation tiles cannot be deleted. They will be removed when the page is deleted.",
+      "Navigation Tile",
+    );
+    return;
+  }
+
   const confirmed = await showTeacherConfirmation(
     `Delete "${getLayoutName(entry)}"?`,
     "Confirm Delete",
