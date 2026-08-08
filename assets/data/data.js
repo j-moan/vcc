@@ -210,14 +210,6 @@ window.CLASSROOM_SITE = {
       "children": [],
       "layout": [
         {
-          "id": "tile-1786226772170-4f47b794fa2fa",
-          "type": "pdf",
-          "label": "PDF",
-          "image": "TradeBookTitleBrownBear.jpg",
-          "target": "BrownBearBrownBearWhatDoYouSeeInteractiveBookCircleTimeActivity-1.pdf",
-          "active": true
-        },
-        {
           "id": "tile-1786227083243-626d52018e92b8",
           "type": "image",
           "label": "Characters",
