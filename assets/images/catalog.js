@@ -11,5 +11,15 @@ window.CLASSROOM_IMAGES = [
   "numbers song cover.jpg",
   "octopus.jpg",
   "reading.jpg",
-  "snoopy summer pool.jpg"
+  "RelaxingAquariumFish.jpg",
+  "RelaxingBirds.jpg",
+  "snoopy summer pool.jpg",
+  "TitleAnimateBooks.jpg",
+  "TitleCalendar.jpg",
+  "TitleMorningMeetingHello.jpg",
+  "TitleMovementBoy.jpg",
+  "TitleN2YUniqueLearning.jpg",
+  "TitleRelaxingFishAquarium.jpg",
+  "TitleTimers.jpg",
+  "UnderConstruction.jpg"
 ];

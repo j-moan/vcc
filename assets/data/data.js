@@ -9,23 +9,22 @@ window.CLASSROOM_SITE = {
       "parent": null,
       "active": true,
       "children": [
+        "relaxing-videos-2",
         "morning-meeting",
-        "math",
-        "relaxing-videos"
+        "relaxing-videos",
+        "unique-learning"
       ],
       "layout": [
+        {
+          "type": "navigation",
+          "container": "relaxing-videos-2",
+          "image": "TitleRelaxingFishAquarium.jpg"
+        },
         {
           "id": "nav-morning-meeting",
           "type": "navigation",
           "container": "morning-meeting",
           "image": "morning-meeting.jpg",
-          "active": true
-        },
-        {
-          "id": "nav-math",
-          "type": "navigation",
-          "container": "math",
-          "image": "math.jpg",
           "active": true
         },
         {
@@ -45,15 +44,15 @@ window.CLASSROOM_SITE = {
         {
           "id": "tile-568cf242-6d2e-4fdd-8f97-d7adac63702e",
           "type": "placeholder",
-          "label": "picture test",
-          "image": "reading.jpg",
+          "label": "Under Construction",
+          "image": "UnderConstruction.jpg",
           "target": "",
           "active": true
         },
         {
           "type": "navigation",
-          "container": "relaxing-videos",
-          "image": ""
+          "container": "unique-learning",
+          "image": "TitleN2YUniqueLearning.jpg"
         }
       ]
     },
@@ -105,40 +104,6 @@ window.CLASSROOM_SITE = {
         }
       ]
     },
-    "math": {
-      "title": "Math",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [
-        "math-videos",
-        "math-documents",
-        "math-images",
-        "math-web-link"
-      ],
-      "layout": [
-        {
-          "type": "navigation",
-          "container": "math-videos",
-          "image": ""
-        },
-        {
-          "type": "navigation",
-          "container": "math-documents",
-          "image": "calendar.jpg"
-        },
-        {
-          "type": "navigation",
-          "container": "math-images",
-          "image": ""
-        },
-        {
-          "type": "navigation",
-          "container": "math-web-link",
-          "image": "snoopy summer pool.jpg"
-        }
-      ]
-    },
     "calendar": {
       "title": "Calendar",
       "subtitle": "",
@@ -155,56 +120,6 @@ window.CLASSROOM_SITE = {
           "active": true
         }
       ]
-    },
-    "math-videos": {
-      "title": "math videos",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": [
-        {
-          "id": "tile-65874ac0-2481-464b-87d8-b1df4baa54b7",
-          "type": "video",
-          "label": "video added",
-          "image": "hello-song.jpg",
-          "target": "https://www.youtube.com/watch?v=yIx1DplJMB4",
-          "active": true
-        },
-        {
-          "id": "tile-1785117232745-df8ee059d2b96",
-          "type": "video",
-          "label": "numbers song",
-          "image": "numbers song cover.jpg",
-          "target": "https://www.youtube.com/watch?v=D0Ajq682yrA&list=RDD0Ajq682yrA&start_radio=1",
-          "active": true
-        }
-      ]
-    },
-    "math-images": {
-      "title": "math imageing",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": [
-        {
-          "id": "tile-1786067079803-f28e92ae6e4e08",
-          "type": "image",
-          "label": "image test",
-          "image": "octopus.jpg",
-          "target": "reading.jpg",
-          "active": true
-        }
-      ]
-    },
-    "math-documents": {
-      "title": "math documenting",
-      "subtitle": "",
-      "parent": "math",
-      "active": true,
-      "children": [],
-      "layout": []
     },
     "relaxing-videos": {
       "title": "Relaxing Videos",
@@ -223,19 +138,44 @@ window.CLASSROOM_SITE = {
         }
       ]
     },
-    "math-web-link": {
-      "title": "math web link",
+    "relaxing-videos-2": {
+      "title": "Relaxing Videos",
       "subtitle": "",
-      "parent": "math",
+      "parent": "home",
       "active": true,
       "children": [],
       "layout": [
         {
-          "id": "tile-1786067763698-ae46dc5b1bb718",
+          "id": "tile-1786225190017-de884e23efa7f",
+          "type": "video",
+          "label": "Fish Aquarium",
+          "image": "RelaxingAquariumFish.jpg",
+          "target": "https://www.youtube.com/watch?v=-eP413GaFVE",
+          "active": true
+        },
+        {
+          "id": "tile-1786225235593-028b8f56253828",
+          "type": "video",
+          "label": "Birds",
+          "image": "RelaxingBirds.jpg",
+          "target": "https://www.youtube.com/watch?v=TtqnTP4ucnY&t=1s",
+          "active": true
+        }
+      ]
+    },
+    "unique-learning": {
+      "title": "Unique Learning",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1786225843298-587fc5ea287188",
           "type": "website",
-          "label": "weather.com",
-          "image": "movement.jpg",
-          "target": "https://weather.com/",
+          "label": "Follow the Rules",
+          "image": "",
+          "target": "https://unique.n2y.com/view/unit-lesson/student-material/6855586?hl=1&page=11",
           "active": true
         }
       ]
