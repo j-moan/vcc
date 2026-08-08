@@ -23,5 +23,6 @@ window.CLASSROOM_IMAGES = [
   "TitleRelaxingFishAquarium.jpg",
   "TitleTimers.jpg",
   "TradeBookTitleBrownBear.jpg",
-  "UnderConstruction.jpg"
+  "UnderConstruction.jpg",
+  "Video Image Snoopy Scuba.jpg"
 ];

@@ -66,9 +66,7 @@ window.CLASSROOM_SITE = {
       "subtitle": "Choose a morning activity",
       "parent": "home",
       "active": true,
-      "children": [
-        "calendar"
-      ],
+      "children": [],
       "layout": [
         {
           "id": "section-songs",
@@ -85,13 +83,6 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
-          "id": "nav-calendar",
-          "type": "navigation",
-          "container": "calendar",
-          "image": "calendar.jpg",
-          "active": true
-        },
-        {
           "id": "tile-25fd7fe9-ccee-424d-bfb0-8250b3800912",
           "type": "information",
           "label": "helloo song message",
@@ -105,23 +96,6 @@ window.CLASSROOM_SITE = {
           "label": "null test",
           "image": "",
           "target": "",
-          "active": true
-        }
-      ]
-    },
-    "calendar": {
-      "title": "Calendar",
-      "subtitle": "",
-      "parent": "morning-meeting",
-      "active": true,
-      "children": [],
-      "layout": [
-        {
-          "id": "tile-b1691105-14d2-4aa4-b46a-f4479374b7dc",
-          "type": "information",
-          "label": "octopus test",
-          "image": "octopus.jpg",
-          "target": "happy swimming",
           "active": true
         }
       ]
@@ -147,6 +121,14 @@ window.CLASSROOM_SITE = {
           "label": "Birds",
           "image": "RelaxingBirds.jpg",
           "target": "https://www.youtube.com/watch?v=TtqnTP4ucnY&t=1s",
+          "active": true
+        },
+        {
+          "id": "tile-1786229746525-8529f938edecc8",
+          "type": "video",
+          "label": "Snoopy Scuba Jazz",
+          "image": "Video Image Snoopy Scuba.jpg",
+          "target": "https://www.youtube.com/watch?v=PMviieC5O3k",
           "active": true
         }
       ]
