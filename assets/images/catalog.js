@@ -1,6 +1,7 @@
 "use strict";
 
 window.CLASSROOM_IMAGES = [
+  "BrownBearImageCharacters.jpg",
   "calendar.jpg",
   "cover brown bear.jpg",
   "hello-song.jpg",
