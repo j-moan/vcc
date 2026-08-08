@@ -11,7 +11,6 @@ window.CLASSROOM_SITE = {
       "children": [
         "relaxing-videos-2",
         "morning-meeting",
-        "relaxing-videos",
         "unique-learning",
         "reading"
       ],
@@ -127,23 +126,6 @@ window.CLASSROOM_SITE = {
         }
       ]
     },
-    "relaxing-videos": {
-      "title": "Relaxing Videos",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [],
-      "layout": [
-        {
-          "id": "tile-1785115273362-185621d5a9923",
-          "type": "video",
-          "label": "Snoopy Pool Jazz",
-          "image": "snoopy summer pool.jpg",
-          "target": "https://www.youtube.com/watch?v=nOPcsdsGw7U&list=RDnOPcsdsGw7U&start_radio=1&t=57s",
-          "active": true
-        }
-      ]
-    },
     "relaxing-videos-2": {
       "title": "Relaxing Videos",
       "subtitle": "",
@@ -208,16 +190,7 @@ window.CLASSROOM_SITE = {
       "parent": "reading",
       "active": true,
       "children": [],
-      "layout": [
-        {
-          "id": "tile-1786227083243-626d52018e92b8",
-          "type": "image",
-          "label": "Characters",
-          "image": "BrownBearImageCharacters.jpg",
-          "target": "BrownBearImageCharacters.jpg",
-          "active": true
-        }
-      ]
+      "layout": []
     }
   }
 };
