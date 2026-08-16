@@ -65,6 +65,7 @@ window.CLASSROOM_IMAGES = [
   "RelaxingBirds.jpg",
   "salamander.jpg",
   "Shark Alphabet Song.jpg",
+  "Snoopy Chill Day Jazz.jpg",
   "snoopy summer pool.jpg",
   "Stand Up Sit Down Patty Shukla.jpg",
   "Thursday Song.jpg",

@@ -20,6 +20,12 @@ window.CLASSROOM_SITE = {
       ],
       "layout": [
         {
+          "id": "section-1786923657282-8a47477ce021c8",
+          "type": "section",
+          "label": "Daily Routine",
+          "active": true
+        },
+        {
           "type": "navigation",
           "container": "relaxing-videos-2",
           "image": "TitleRelaxingFishAquarium.jpg"
@@ -149,6 +155,14 @@ window.CLASSROOM_SITE = {
           "label": "Snoopy Scuba Jazz",
           "image": "Video Image Snoopy Scuba.jpg",
           "target": "https://www.youtube.com/watch?v=PMviieC5O3k",
+          "active": true
+        },
+        {
+          "id": "tile-1786923540962-88080ba2f8b518",
+          "type": "video",
+          "label": "Snoopy Chill Day Jazz",
+          "image": "Snoopy Chill Day Jazz.jpg",
+          "target": "https://www.youtube.com/watch?v=M_n0G4U4-JY&list=PLGl_fXLdnB-o&index=2&t=627s",
           "active": true
         },
         {
