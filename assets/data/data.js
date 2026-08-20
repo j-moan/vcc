@@ -634,7 +634,7 @@ window.CLASSROOM_SITE = {
           "id": "tile-1787263418564-eb8e2a932022b",
           "type": "video",
           "label": "The Ants Go Marching",
-          "image": "",
+          "image": "ants go marching.jpg",
           "target": "https://www.youtube.com/watch?v=2S__fbCGwOM",
           "active": true
         },
