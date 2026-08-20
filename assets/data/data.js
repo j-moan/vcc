@@ -629,6 +629,78 @@ window.CLASSROOM_SITE = {
           "image": "Pete McDonald Farm.jpg",
           "target": "https://www.youtube.com/watch?v=mPE4397J37E&list=RDmPE4397J37E&start_radio=1",
           "active": true
+        },
+        {
+          "id": "tile-1787263418564-eb8e2a932022b",
+          "type": "video",
+          "label": "The Ants Go Marching",
+          "image": "",
+          "target": "https://www.youtube.com/watch?v=2S__fbCGwOM",
+          "active": true
+        },
+        {
+          "id": "tile-1787263548875-ad7e2d34b3744",
+          "type": "video",
+          "label": "Mickey's Campout Read Aloud",
+          "image": "",
+          "target": "https://www.youtube.com/watch?v=EkqtaoJGSG8",
+          "active": true
+        },
+        {
+          "id": "tile-1787263606723-9d5ff6e9a1178",
+          "type": "video",
+          "label": "It's a Sea Shell Day",
+          "image": "Seashell Day Book.jpg",
+          "target": "https://www.youtube.com/watch?v=yOEXVMmmtSM",
+          "active": true
+        },
+        {
+          "id": "tile-1787263800915-95480fde922a28",
+          "type": "video",
+          "label": "Curious George - Puppy Day",
+          "image": "curious george.jpg",
+          "target": "https://www.youtube.com/watch?v=OAnmQ0vo4vc&t=1504s",
+          "active": true
+        },
+        {
+          "id": "tile-1787264041387-c897471158c368",
+          "type": "video",
+          "label": "Llama Llama - Red Pajama",
+          "image": "llama llama red pajama.jpg",
+          "target": "https://www.youtube.com/watch?v=K7evZs9iRoU",
+          "active": true
+        },
+        {
+          "id": "tile-1787263853675-6d16fbbd4fa34",
+          "type": "video",
+          "label": "Pete the Cat - Magic Sunglasses",
+          "image": "pete sunglasses.jpg",
+          "target": "https://www.youtube.com/watch?v=lcN3xOj6zSE",
+          "active": true
+        },
+        {
+          "id": "tile-1787264419908-bbe8935f5b4408",
+          "type": "video",
+          "label": "Bluey Book Reads",
+          "image": "mini bluey.jpg",
+          "target": "https://www.youtube.com/live/JScv28R2uxo",
+          "active": true
+        },
+        {
+          "id": "tile-1787264532812-62a1b92de8b318",
+          "type": "video",
+          "label": "Sesame Street - Elmo Explores Space",
+          "image": "elmo space.jpg",
+          "target": "https://www.youtube.com/watch?v=dorzT9u7pek",
+          "active": true
+        },
+        {
+          "id": "tile-1787265329268-3786c98c7040d",
+          "type": "video",
+          "label": "What Shape is it?",
+          "image": "what shape.jpg",
+          "target": "https://www.youtube.com/watch?v=9GFEjNL0XXw",
+          "active": true
         }
       ]
     },
