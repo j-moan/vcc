@@ -693,7 +693,7 @@ window.CLASSROOM_SITE = {
           "id": "tile-1787263548875-ad7e2d34b3744",
           "type": "video",
           "label": "Mickey's Campout Read Aloud",
-          "image": "",
+          "image": "Mickey Mouse.jpg",
           "target": "https://www.youtube.com/watch?v=EkqtaoJGSG8",
           "active": true
         },
@@ -765,7 +765,7 @@ window.CLASSROOM_SITE = {
           "id": "tile-1787698242526-f8572bfab5362",
           "type": "video",
           "label": "Petes Go Marching 123",
-          "image": "",
+          "image": "Petes go marching.jpg",
           "target": "https://www.youtube.com/watch?v=ak5pXDwZLqE&list=RDak5pXDwZLqE&start_radio=1",
           "active": true
         },
@@ -773,8 +773,16 @@ window.CLASSROOM_SITE = {
           "id": "tile-1787698371630-f9ee4e4ef611b8",
           "type": "video",
           "label": "Five Little Pumpkins",
-          "image": "",
+          "image": "Pete Five 5 Little Pumpkins.jpg",
           "target": "https://www.youtube.com/watch?v=ZGnXklGW3_8",
+          "active": true
+        },
+        {
+          "id": "tile-1787699161382-2a86340f9c9c88",
+          "type": "video",
+          "label": "Pete White Shoes",
+          "image": "Pete White Shoes.jpg",
+          "target": "https://www.youtube.com/watch?v=-GSnmRZlgc4",
           "active": true
         }
       ]

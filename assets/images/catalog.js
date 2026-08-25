@@ -100,5 +100,6 @@ window.CLASSROOM_IMAGES = [
   "UnderConstruction.jpg",
   "Video Image Snoopy Scuba.jpg",
   "Wednesday Song.jpg",
-  "what shape.jpg"
+  "what shape.jpg",
+  "white shoes.jpg"
 ];
