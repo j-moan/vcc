@@ -90,6 +90,12 @@ window.CLASSROOM_SITE = {
           "image": "Clean up.jpg",
           "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
           "active": true
+        },
+        {
+          "id": "section-1787699285951-89d7b6c5d9899",
+          "type": "section",
+          "label": ".",
+          "active": true
         }
       ]
     },
