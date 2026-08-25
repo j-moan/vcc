@@ -13,7 +13,6 @@ window.CLASSROOM_SITE = {
         "morning-meeting",
         "calendar",
         "movement",
-        "timers",
         "unique-learning",
         "reading",
         "snack-time-videos"
@@ -48,11 +47,6 @@ window.CLASSROOM_SITE = {
           "image": "movement fast kid.jpg"
         },
         {
-          "type": "navigation",
-          "container": "timers",
-          "image": "TitleTimers.jpg"
-        },
-        {
           "id": "section-1786919626615-04a6cd3f15a2a",
           "type": "section",
           "label": "Reading",
@@ -72,6 +66,30 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "snack-time-videos",
           "image": "Mickey Mouse.jpg"
+        },
+        {
+          "id": "tile-1787697170661-20fa545fd9f2a",
+          "type": "video",
+          "label": "Time to Go Home",
+          "image": "Time to Go Home Goodbye.jpg",
+          "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787697504429-6921de528c30c",
+          "type": "video",
+          "label": "Tidy Up Song",
+          "image": "time to Clean Up Song.jpg",
+          "target": "https://www.youtube.com/watch?v=gPq7wzGEjqE&list=RDgPq7wzGEjqE&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787697601789-f83cbb353345f",
+          "type": "video",
+          "label": "Everybody Clean Up",
+          "image": "Clean up.jpg",
+          "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
+          "active": true
         }
       ]
     },
@@ -461,7 +479,40 @@ window.CLASSROOM_SITE = {
       "parent": "reading",
       "active": true,
       "children": [],
-      "layout": []
+      "layout": [
+        {
+          "id": "tile-1787698390014-fff44a30cf5468",
+          "type": "video",
+          "label": "Can you do it?",
+          "image": "can you do it I can.jpg",
+          "target": "https://www.youtube.com/watch?v=SrUtNVVwKrU&list=RDSrUtNVVwKrU&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787698438582-de930a1a50698",
+          "type": "video",
+          "label": "Head to Toe Read Aloud",
+          "image": "Head to Toe.jpg",
+          "target": "https://www.youtube.com/watch?v=1IJdpzvhPrg",
+          "active": true
+        },
+        {
+          "id": "tile-1787698623894-095563706b41d8",
+          "type": "video",
+          "label": "One Little Finger - Body Parts Song",
+          "image": "one little finger body parts.jpg",
+          "target": "https://www.youtube.com/watch?v=T5S8rO3AmWI",
+          "active": true
+        },
+        {
+          "id": "tile-1787698915975-fbaa4e2e07bd18",
+          "type": "video",
+          "label": "Head, Shoulders, Knees & Toes",
+          "image": "head shoulders knees and toes.jpg",
+          "target": "https://www.youtube.com/watch?v=LgNcGJ_XYlw&list=RDLgNcGJ_XYlw&start_radio=1",
+          "active": true
+        }
+      ]
     },
     "pete-the-cat-white-shoes": {
       "title": "Pete the Cat - White Shoes",
@@ -501,6 +552,14 @@ window.CLASSROOM_SITE = {
           "label": "Months of the Year",
           "image": "Months of the Year Song.jpg",
           "target": "https://www.youtube.com/watch?v=Fe9bnYRzFvk&list=PLGl_fXLdnB-o&index=22",
+          "active": true
+        },
+        {
+          "id": "tile-1787695624469-b8513fff2f5cb8",
+          "type": "video",
+          "label": "12 Months",
+          "image": "12 months .jpg",
+          "target": "https://www.youtube.com/watch?v=-d3jkbP1xc8&list=RD-d3jkbP1xc8&start_radio=1",
           "active": true
         },
         {
@@ -550,14 +609,6 @@ window.CLASSROOM_SITE = {
           "active": true
         }
       ]
-    },
-    "timers": {
-      "title": "Timers",
-      "subtitle": "",
-      "parent": "home",
-      "active": true,
-      "children": [],
-      "layout": []
     },
     "snack-time-videos": {
       "title": "Snack Time Stories",
@@ -700,6 +751,30 @@ window.CLASSROOM_SITE = {
           "label": "What Shape is it?",
           "image": "what shape.jpg",
           "target": "https://www.youtube.com/watch?v=9GFEjNL0XXw",
+          "active": true
+        },
+        {
+          "id": "tile-1787698086046-5665152fd76de8",
+          "type": "video",
+          "label": "Chicka Chicka Boom Boom ABC",
+          "image": "Chicka Chicka Boom Boom.jpg",
+          "target": "https://www.youtube.com/watch?v=W2zbKF5z1cs&list=RDW2zbKF5z1cs&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787698242526-f8572bfab5362",
+          "type": "video",
+          "label": "Petes Go Marching 123",
+          "image": "",
+          "target": "https://www.youtube.com/watch?v=ak5pXDwZLqE&list=RDak5pXDwZLqE&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787698371630-f9ee4e4ef611b8",
+          "type": "video",
+          "label": "Five Little Pumpkins",
+          "image": "",
+          "target": "https://www.youtube.com/watch?v=ZGnXklGW3_8",
           "active": true
         }
       ]
