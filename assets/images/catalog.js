@@ -20,6 +20,8 @@ window.CLASSROOM_IMAGES = [
   "Brown bear animated Red bird book.jpg",
   "brown bear mr elephant book song.jpg",
   "BrownBearImageCharacters.jpg",
+  "brush teeth monster.jpg",
+  "Brush teeth noodle.jpg",
   "calendar.jpg",
   "can you do it I can.jpg",
   "Chicka Chicka Boom Boom.jpg",
@@ -63,6 +65,7 @@ window.CLASSROOM_IMAGES = [
   "octopus.jpg",
   "one little finger body parts.jpg",
   "Panda Bubbles.jpg",
+  "parts of the body song.jpg",
   "Patty Shukla Jump.jpg",
   "Patty Shukla Shake.jpg",
   "Patty Shukla Wheels on the Bus.jpg",
@@ -100,6 +103,7 @@ window.CLASSROOM_IMAGES = [
   "UnderConstruction.jpg",
   "Video Image Snoopy Scuba.jpg",
   "Wednesday Song.jpg",
+  "what color are they.jpg",
   "what shape.jpg",
   "white shoes.jpg"
 ];

@@ -15,7 +15,8 @@ window.CLASSROOM_SITE = {
         "movement",
         "unique-learning",
         "reading",
-        "snack-time-videos"
+        "snack-time-videos",
+        "brushing-teeth-songs"
       ],
       "layout": [
         {
@@ -47,6 +48,30 @@ window.CLASSROOM_SITE = {
           "image": "movement fast kid.jpg"
         },
         {
+          "id": "tile-1787697601789-f83cbb353345f",
+          "type": "video",
+          "label": "Everybody Clean Up",
+          "image": "Clean up.jpg",
+          "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787697504429-6921de528c30c",
+          "type": "video",
+          "label": "Tidy Up Song",
+          "image": "time to Clean Up Song.jpg",
+          "target": "https://www.youtube.com/watch?v=gPq7wzGEjqE&list=RDgPq7wzGEjqE&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787697170661-20fa545fd9f2a",
+          "type": "video",
+          "label": "Time to Go Home",
+          "image": "Time to Go Home Goodbye.jpg",
+          "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
+          "active": true
+        },
+        {
           "id": "section-1786919626615-04a6cd3f15a2a",
           "type": "section",
           "label": "Reading",
@@ -68,34 +93,15 @@ window.CLASSROOM_SITE = {
           "image": "Mickey Mouse.jpg"
         },
         {
-          "id": "tile-1787697170661-20fa545fd9f2a",
-          "type": "video",
-          "label": "Time to Go Home",
-          "image": "Time to Go Home Goodbye.jpg",
-          "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
-          "active": true
-        },
-        {
-          "id": "tile-1787697504429-6921de528c30c",
-          "type": "video",
-          "label": "Tidy Up Song",
-          "image": "time to Clean Up Song.jpg",
-          "target": "https://www.youtube.com/watch?v=gPq7wzGEjqE&list=RDgPq7wzGEjqE&start_radio=1",
-          "active": true
-        },
-        {
-          "id": "tile-1787697601789-f83cbb353345f",
-          "type": "video",
-          "label": "Everybody Clean Up",
-          "image": "Clean up.jpg",
-          "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
-          "active": true
-        },
-        {
           "id": "section-1787699285951-89d7b6c5d9899",
           "type": "section",
           "label": ".",
           "active": true
+        },
+        {
+          "type": "navigation",
+          "container": "brushing-teeth-songs",
+          "image": ""
         }
       ]
     },
@@ -328,6 +334,14 @@ window.CLASSROOM_SITE = {
           "image": "Bear Hunt.jpg",
           "target": "https://www.youtube.com/watch?v=AuQ9jefyMIA&list=PLNR0wAbzACmQ&index=4",
           "active": true
+        },
+        {
+          "id": "tile-1787699765368-75254a330ce9b8",
+          "type": "video",
+          "label": "Are they? Sentences",
+          "image": "what color are they.jpg",
+          "target": "https://www.youtube.com/watch?v=_49PJe-e_i4",
+          "active": true
         }
       ]
     },
@@ -487,19 +501,19 @@ window.CLASSROOM_SITE = {
       "children": [],
       "layout": [
         {
-          "id": "tile-1787698390014-fff44a30cf5468",
+          "id": "tile-1787698438582-de930a1a50698",
           "type": "video",
-          "label": "Can you do it?",
-          "image": "can you do it I can.jpg",
-          "target": "https://www.youtube.com/watch?v=SrUtNVVwKrU&list=RDSrUtNVVwKrU&start_radio=1",
+          "label": "Head to Toe - Read Aloud",
+          "image": "Head to Toe.jpg",
+          "target": "https://www.youtube.com/watch?v=1IJdpzvhPrg",
           "active": true
         },
         {
-          "id": "tile-1787698438582-de930a1a50698",
+          "id": "tile-1787698390014-fff44a30cf5468",
           "type": "video",
-          "label": "Head to Toe Read Aloud",
-          "image": "Head to Toe.jpg",
-          "target": "https://www.youtube.com/watch?v=1IJdpzvhPrg",
+          "label": "Head to Toe - Can you do it?",
+          "image": "can you do it I can.jpg",
+          "target": "https://www.youtube.com/watch?v=SrUtNVVwKrU&list=RDSrUtNVVwKrU&start_radio=1",
           "active": true
         },
         {
@@ -516,6 +530,14 @@ window.CLASSROOM_SITE = {
           "label": "Head, Shoulders, Knees & Toes",
           "image": "head shoulders knees and toes.jpg",
           "target": "https://www.youtube.com/watch?v=LgNcGJ_XYlw&list=RDLgNcGJ_XYlw&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787699835759-228ac90014cb8",
+          "type": "video",
+          "label": "Parts of the Body Song",
+          "image": "parts of the body song.jpg",
+          "target": "https://www.youtube.com/watch?v=BwHMMZQGFoM&list=RDBwHMMZQGFoM&start_radio=1",
           "active": true
         }
       ]
@@ -913,6 +935,31 @@ window.CLASSROOM_SITE = {
       "active": true,
       "children": [],
       "layout": []
+    },
+    "brushing-teeth-songs": {
+      "title": "Brushing Teeth Songs",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1787699416823-0a6b7c10174ee",
+          "type": "video",
+          "label": "Brush Your Teeth",
+          "image": "brush teeth monster.jpg",
+          "target": "https://www.youtube.com/watch?v=wCio_xVlgQ0&list=RDwCio_xVlgQ0&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1787699473447-7795905e168b28",
+          "type": "video",
+          "label": "Brushing Teeth - Noodle",
+          "image": "Brush teeth noodle.jpg",
+          "target": "https://www.youtube.com/watch?v=ENAMlqxqZRI&list=RDENAMlqxqZRI&start_radio=1",
+          "active": true
+        }
+      ]
     }
   }
 };
