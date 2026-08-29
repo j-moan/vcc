@@ -6,7 +6,7 @@ import { validateAssets } from "./validators/asset-validator.js";
 import { loadProject, ProjectLoadError } from "./project/project-loader.js";
 import { openVideo, closeVideo } from "./actions/video-action.js";
 import { openPdf, closePdf } from "./actions/pdf-action.js";
-import { getImagePath } from "./utilities/asset-paths.js";
+import { getImagePath, getVideoPath } from "./utilities/asset-paths.js";
 import { ProjectModel } from "./models/project-model.js";
 import { loadWorkingProjectData } from "./project/project-storage.js";
 
@@ -42,6 +42,11 @@ const elements = {
   videoTitle: document.getElementById("videoTitle"),
   youtubePlayerElement: document.getElementById("youtubePlayer"),
   closeVideoButton: document.getElementById("closeVideoButton"),
+
+  localVideoModal: document.getElementById("localVideoModal"),
+  localVideoTitle: document.getElementById("localVideoTitle"),
+  localVideoPlayer: document.getElementById("localVideoPlayer"),
+  closeLocalVideoButton: document.getElementById("closeLocalVideoButton"),
 
   pdfModal: document.getElementById("pdfModal"),
   pdfTitle: document.getElementById("pdfTitle"),
@@ -304,6 +309,9 @@ function handleContentAction(entry) {
         showMessage(error.message);
       });
       break;
+    case "localVideo":
+      openLocalVideo(entry);
+      break;
     case "website":
       openWebsite(entry);
       break;
@@ -356,6 +364,32 @@ function closeImage() {
   elements.imageModal.hidden = true;
   elements.fullScreenImage.src = "";
   elements.fullScreenImage.alt = "";
+}
+
+function openLocalVideo(entry) {
+  if (!entry.target) {
+    showMessage("This video is not available.");
+    return;
+  }
+
+  const label = getEntryLabel(entry);
+
+  elements.localVideoTitle.textContent = label;
+  elements.localVideoPlayer.src = getVideoPath(entry.target);
+  elements.localVideoModal.hidden = false;
+
+  elements.localVideoPlayer.play().catch(() => {
+    // The browser may require the user to press Play.
+  });
+
+  elements.closeLocalVideoButton.focus();
+}
+
+function closeLocalVideo() {
+  elements.localVideoPlayer.pause();
+  elements.localVideoPlayer.removeAttribute("src");
+  elements.localVideoPlayer.load();
+  elements.localVideoModal.hidden = true;
 }
 
 function getEntryLabel(entry) {
@@ -485,14 +519,27 @@ elements.teacherPasswordDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
   closeTeacherPasswordDialog();
 });
+
 elements.closeVideoButton.addEventListener("click", () => {
   closeVideo(elements);
 });
+
 elements.videoModal.addEventListener("click", (event) => {
   if (event.target === elements.videoModal) {
     closeVideo(elements);
   }
 });
+
+elements.closeLocalVideoButton.addEventListener("click", () => {
+  closeLocalVideo();
+});
+
+elements.localVideoModal.addEventListener("click", (event) => {
+  if (event.target === elements.localVideoModal) {
+    closeLocalVideo();
+  }
+});
+
 elements.closePdfButton.addEventListener("click", () => {
   closePdf(elements);
 });

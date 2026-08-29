@@ -67,6 +67,12 @@ const pdfSearchInput = document.querySelector("#pdf-search-input");
 const pdfPickerList = document.querySelector("#pdf-picker-list");
 const cancelPdfPickerButton = document.querySelector("#cancel-pdf-picker-button");
 const selectPdfButton = document.querySelector("#select-pdf-button");
+const videoPickerDialog = document.querySelector("#video-picker-dialog");
+const videoPickerForm = document.querySelector("#video-picker-form");
+const videoSearchInput = document.querySelector("#video-search-input");
+const videoPickerList = document.querySelector("#video-picker-list");
+const cancelVideoPickerButton = document.querySelector("#cancel-video-picker-button");
+const selectVideoButton = document.querySelector("#select-video-button");
 const catalogAssetsButton = document.querySelector("#catalog-assets-button");
 
 let project = null;
@@ -79,6 +85,7 @@ let editingNavigationContainerId = null;
 let selectedImagePath = null;
 let imagePickerTarget = "tile";
 let selectedPdf = null;
+let selectedVideo = null;
 
 async function initializeTeacherView() {
   try {
@@ -300,6 +307,7 @@ function getLayoutIcon(type) {
     section: "────",
     navigation: "🧭",
     video: "▶️",
+    localVideo: "▶️",
     image: "🖼️",
     website: "🌐",
     pdf: "📄",
@@ -1015,6 +1023,102 @@ function applySelectedPdf() {
   closePdfPickerDialog();
 }
 
+function renderVideoPickerList() {
+  videoPickerList.replaceChildren();
+
+  const catalog = Array.isArray(window.CLASSROOM_VIDEOS) ? window.CLASSROOM_VIDEOS : [];
+
+  const searchText = videoSearchInput.value.trim().toLowerCase();
+
+  const filteredVideos = catalog.filter((fileName) => fileName.toLowerCase().includes(searchText));
+
+  if (filteredVideos.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "pdf-picker-empty";
+    emptyMessage.textContent = "No matching video files found.";
+
+    videoPickerList.appendChild(emptyMessage);
+    return;
+  }
+
+  filteredVideos.forEach((fileName) => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "pdf-picker-list-item";
+    button.dataset.videoFileName = fileName;
+    button.textContent = fileName;
+
+    if (fileName === selectedVideo) {
+      button.classList.add("pdf-picker-list-item-selected");
+    }
+
+    button.addEventListener("click", () => {
+      updateVideoPickerSelection(fileName);
+    });
+
+    button.addEventListener("dblclick", () => {
+      updateVideoPickerSelection(fileName);
+      applySelectedVideo();
+    });
+
+    videoPickerList.appendChild(button);
+  });
+}
+
+function updateVideoPickerSelection(fileName) {
+  selectedVideo = fileName;
+
+  selectVideoButton.disabled = false;
+
+  videoPickerList.querySelectorAll(".pdf-picker-list-item-selected").forEach((item) => {
+    item.classList.remove("pdf-picker-list-item-selected");
+  });
+
+  const selectedItem = videoPickerList.querySelector(
+    `[data-video-file-name="${CSS.escape(fileName)}"]`,
+  );
+
+  selectedItem?.classList.add("pdf-picker-list-item-selected");
+}
+
+function closeVideoPickerDialog() {
+  selectedVideo = null;
+
+  if (videoPickerDialog.open) {
+    videoPickerDialog.close();
+  }
+}
+
+function openVideoPickerDialog() {
+  selectedVideo = tileDestinationInput.value || null;
+  videoSearchInput.value = "";
+
+  renderVideoPickerList();
+
+  if (selectedVideo) {
+    updateVideoPickerSelection(selectedVideo);
+  } else {
+    selectVideoButton.disabled = true;
+  }
+
+  videoPickerDialog.showModal();
+
+  window.requestAnimationFrame(() => {
+    videoSearchInput.focus();
+  });
+}
+
+function applySelectedVideo() {
+  if (!selectedVideo) {
+    return;
+  }
+
+  tileDestinationInput.value = selectedVideo;
+
+  closeVideoPickerDialog();
+}
+
 function applySelectedImage() {
   if (!selectedImagePath) {
     return;
@@ -1096,16 +1200,28 @@ function updateTileDestinationField() {
 
   tileDestinationGroup.hidden = false;
   tileDestinationInput.required = true;
-  const usesLocalPicker = type === "pdf" || type === "image";
+
+  const usesLocalPicker = type === "pdf" || type === "image" || type === "localVideo";
+
   tileDestinationInput.readOnly = usesLocalPicker;
+
   tileDestinationInput.placeholder =
-    type === "pdf" ? "Click to choose a PDF" : type === "image" ? "Click to choose an image" : "";
+    type === "pdf"
+      ? "Click to choose a PDF"
+      : type === "image"
+        ? "Click to choose an image"
+        : type === "localVideo"
+          ? "Click to choose a video"
+          : type === "video"
+            ? "Paste a YouTube URL"
+            : "";
 
   const labels = {
     video: "YouTube URL:",
+    localVideo: "Video File:",
     website: "Website URL:",
     pdf: "PDF File or URL:",
-    image: "Image",
+    image: "Image:",
   };
 
   tileDestinationLabel.textContent = labels[type] || "Destination:";
@@ -1255,6 +1371,8 @@ tileDestinationInput.addEventListener("click", () => {
     openPdfPickerDialog();
   } else if (tileTypeSelect.value === "image") {
     openTileDestinationImagePickerDialog();
+  } else if (tileTypeSelect.value === "localVideo") {
+    openVideoPickerDialog();
   }
 });
 tileDestinationInput.addEventListener("keydown", (event) => {
@@ -1264,6 +1382,12 @@ tileDestinationInput.addEventListener("keydown", (event) => {
   } else if (tileTypeSelect.value === "image" && (event.key === "Enter" || event.key === " ")) {
     event.preventDefault();
     openTileDestinationImagePickerDialog();
+  } else if (
+    tileTypeSelect.value === "localVideo" &&
+    (event.key === "Enter" || event.key === " ")
+  ) {
+    event.preventDefault();
+    openVideoPickerDialog();
   }
 });
 pdfSearchInput.addEventListener("input", renderPdfPickerList);
@@ -1275,6 +1399,16 @@ pdfPickerForm.addEventListener("submit", (event) => {
 pdfPickerDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
   closePdfPickerDialog();
+});
+videoSearchInput.addEventListener("input", renderVideoPickerList);
+cancelVideoPickerButton.addEventListener("click", closeVideoPickerDialog);
+videoPickerForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  applySelectedVideo();
+});
+videoPickerDialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeVideoPickerDialog();
 });
 publishButton.addEventListener("click", async () => {
   try {

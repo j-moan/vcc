@@ -8,7 +8,7 @@ This document defines the software architecture of the VCC Classroom Launcher.
 
 It describes how the application is organized, how its major systems interact, and the architectural principles that guide future development.
 
-Unlike implementation files, this document describes responsibilities rather than specific source files. JavaScript modules may evolve over time, but the responsibilities defined here should remain stable.
+Unlike implementation files, this document describes responsibilities rather than specific source files whenever practical. JavaScript modules may evolve over time, but the responsibilities defined here should remain stable.
 
 This document focuses on _how_ the application is organized rather than _what_ it displays.
 
@@ -20,7 +20,7 @@ The architecture is designed around several primary goals.
 
 ## Simplicity
 
-The application should remain understandable by a single developer.
+The application should remain understandable and maintainable by a single developer.
 
 Complexity should only be introduced when it provides measurable long-term value.
 
@@ -44,13 +44,17 @@ Missing assets should degrade gracefully rather than preventing classroom use.
 
 Errors should be isolated whenever possible.
 
+The published classroom should remain independent of Teacher Mode availability.
+
 ---
 
 ## Maintainability
 
-The application should evolve by replacing individual systems rather than redesigning the entire application.
+The application should evolve by replacing or extending individual systems rather than redesigning the entire application.
 
 Future enhancements should require modifying as few existing components as possible.
+
+Backward compatibility should be preserved when practical, particularly for existing classroom project data.
 
 ---
 
@@ -66,6 +70,7 @@ Examples include:
 - Editing
 - Publishing
 - Asset management
+- Content actions
 
 Subsystems should communicate through clearly defined interfaces rather than directly manipulating each other's internal implementation.
 
@@ -79,29 +84,29 @@ Everything displayed to students originates from project data.
 
 Teacher Mode exists to modify project data rather than modify the runtime.
 
+Static application interface elements may exist in HTML, but classroom-specific content belongs in project data.
+
 ---
 
 ## Storage Independence
 
-Project data should remain independent of where it is stored.
+Project data should remain logically independent of where it is stored.
 
-The application should not assume projects originate from:
+The application should not embed storage-specific paths inside project data.
 
+Storage implementations may evolve between:
+
+- Classroom server storage
 - GitHub
-- Local Storage
-- Local files
 - Cloud storage
-- A classroom server
+- District storage
+- Other project repositories
 
-Storage implementations should be replaceable without changing the rest of the application.
+Asset helper and publishing systems isolate these storage differences from project data.
 
 ---
 
 # Architectural Principles
-
-The VCC Classroom Launcher follows several fundamental architectural principles.
-
----
 
 ## Single Responsibility
 
@@ -115,8 +120,9 @@ Examples include:
 - Actions launch classroom content.
 - Teacher Mode edits projects.
 - Publishing distributes projects.
+- Asset Helpers resolve asset locations.
 
-Responsibilities should not overlap.
+Responsibilities should not unnecessarily overlap.
 
 ---
 
@@ -131,9 +137,10 @@ The following concerns remain independent:
 - Rendering
 - Asset management
 - Publishing
+- Content launching
 - User interface
 
-Each layer communicates only with adjacent architectural layers.
+Each system should communicate through defined boundaries rather than depending on another system's implementation details.
 
 ---
 
@@ -145,7 +152,7 @@ For example:
 
 Navigation Entries reference Containers.
 
-Navigation labels are obtained from the referenced Container rather than duplicated inside Navigation Entries.
+Navigation labels are obtained from the referenced Container rather than unnecessarily duplicated inside Navigation Entries.
 
 This minimizes synchronization problems and simplifies editing.
 
@@ -169,13 +176,13 @@ Subsystems should expose simple interfaces while hiding implementation details.
 
 Examples include:
 
-Asset helper functions determine where assets are stored.
+Asset helper functions determine where assets are located.
 
-Renderers do not need to know storage locations.
+Renderers do not need to know whether an asset is being loaded from the working library or the published site.
 
-Publishing does not need to know how editing works.
+Teacher Mode does not need to know how individual Student content viewers are implemented.
 
-Teacher Mode does not need to know how rendering works.
+Student Mode does not need to know how published data reached GitHub Pages.
 
 ---
 
@@ -186,9 +193,10 @@ Whenever practical, failures should produce usable behavior rather than applicat
 Examples include:
 
 - Missing images display the default tile resource.
-- Missing classroom pages are skipped.
+- Missing classroom pages are skipped or reported cleanly.
 - Missing documents generate classroom-friendly messages.
-- Asset validation produces warnings rather than preventing application startup.
+- Invalid content targets generate understandable messages.
+- Asset validation produces warnings where appropriate rather than unnecessarily preventing application startup.
 
 ---
 
@@ -198,20 +206,18 @@ The architecture should allow individual systems to evolve independently.
 
 Examples include:
 
-- Replacing Local Storage
-- Adding cloud publishing
-- Hosting on a classroom Mini-PC
 - Supporting multiple teachers
+- Adding authentication
+- Adding automatic backups
+- Replacing GitHub Pages with another public host
+- Adding cloud publishing
+- Adding additional content types
 
-These enhancements should replace individual architectural layers rather than requiring redesign of the application.
+These enhancements should extend or replace individual architectural layers rather than require redesign of the application.
 
 ---
 
 # Core Concepts
-
-Everything within the application is built around a small number of core concepts.
-
----
 
 ## Project
 
@@ -226,7 +232,7 @@ A Project contains:
 - Relationships
 - Classroom settings
 
-The Project contains all information required to present a classroom experience.
+The Project contains the information required to present a classroom experience.
 
 ---
 
@@ -243,74 +249,104 @@ Each Container owns:
 - Metadata
 - Navigation relationships
 
-Containers define navigation.
+Containers define navigation structure.
 
-They do not define presentation.
+They do not define presentation implementation.
 
 ---
 
 ## Layout
 
-Every Container owns exactly one Layout.
+Every Container owns a Layout.
 
 A Layout is an ordered collection of Layout Entries.
 
-Layouts define presentation order only.
+Layouts define presentation order.
 
-They do not define hierarchy.
+They do not define classroom hierarchy.
 
 ---
 
 ## Layout Entry
 
-Every visible object displayed on a page is represented by one Layout Entry.
+Every visible classroom item displayed within a page layout is represented by a Layout Entry.
 
-Current entry categories include:
+Current actively supported classroom entry categories include:
 
 - Navigation
 - Section
-- Video
+- YouTube Video
+- Local Video
 - PDF
 - Website
 - Image
-- PowerPoint
-- Information
 - Placeholder
+
+The underlying project type names intentionally distinguish between the two video implementations:
+
+```text
+video       = YouTube video
+localVideo  = locally stored video file
+```
+
+The existing `video` type remains the YouTube type for backward compatibility with previously created classroom data.
 
 Additional entry types should be added without requiring architectural redesign.
 
+Legacy project data may contain older entry types that are no longer exposed by the current Teacher interface. Compatibility with legacy data should be considered before removing runtime support.
+
 ---
 
-## Student Mode
+# Student Mode
 
 Student Mode presents an existing classroom.
 
 Student Mode never edits project data.
 
-Student Mode is responsible only for:
+Student Mode is responsible for:
 
+- Loading classroom data
 - Navigation
 - Rendering
 - Launching classroom content
+- Viewer management
 - Presenting messages
+- Detecting published classroom updates
+
+Student Mode operates in two environments:
+
+1. Published Student Mode
+2. Local Student Preview
+
+Both use the same Student application and project structure.
 
 ---
 
-## Teacher Mode
+# Teacher Mode
 
-Teacher Mode edits classroom projects.
+Teacher Mode creates and modifies classroom projects.
 
-Teacher Mode never manipulates serialized project data directly.
+Teacher Mode operates against the authoritative working project and working asset library hosted on the classroom server.
 
-Instead it edits the Project Model.
+Teachers should never need to edit JavaScript, JSON, asset catalogs, or filesystem paths directly.
 
 ---
 
-## Project Model
+# Project Model
 
 The Project Model is the editable representation of a classroom.
 
-Teacher Mode performs every modification through the Project Model.
+Teacher Mode performs project modifications through the Project Model.
+
+Typical operations include:
+
+- Create Container
+- Rename Container
+- Delete Container
+- Add Layout Entry
+- Delete Layout Entry
+- Move Layout Entry
+- Modify Properties
 
 The Project Model is responsible for maintaining project integrity while editing.
 
@@ -318,108 +354,151 @@ The Project Model is responsible for maintaining project integrity while editing
 
 # System Architecture
 
-The application is organized into several major systems.
+The Student runtime follows this conceptual architecture:
 
-```
-Published Project Source
-        │
-        ▼
+```text
+Project Source
+      │
+      ▼
 Project Loader
-        │
-        ▼
+      │
+      ▼
 Validation
-        │
-        ▼
+      │
+      ▼
 Application Controller
-        │
-        ▼
+      │
+      ▼
 Renderers
-        │
-        ▼
+      │
+      ▼
 Content Actions
-        │
-        ▼
-Browser
+      │
+      ▼
+Browser / Viewer
 ```
 
-Each layer performs a single responsibility.
+Each layer performs a distinct responsibility.
 
-Information flows downward.
+Information should flow through defined interfaces.
 
-Lower layers should not directly depend upon higher layers.
+Lower-level systems should not unnecessarily depend upon higher-level systems.
 
 ---
 
-# Published Project Source
+# Classroom Server Architecture
 
-The runtime intentionally remains independent of where projects originate.
+The classroom server is the authoritative editing environment.
 
-Current development uses:
+The current classroom server is hosted on the VCC Beelink system.
+
+It provides:
+
+- Teacher Mode
+- Local Student Preview
+- Working classroom project data
+- Master classroom assets
+- Asset catalogs
+- VCC server API
+- Publishing services
+
+The classroom server separates the editable classroom environment from the publicly published classroom.
+
+---
+
+# Working Project
+
+The authoritative Working Project is stored on the classroom server as:
+
+```text
+/srv/vcc/assets/data/data.js
+```
+
+This file contains the classroom definition used by Teacher Mode and local Student Preview.
+
+Teacher Mode reads and writes the Working Project through the classroom server API.
+
+The browser is not the authoritative project storage location.
+
+---
+
+# Published Project
+
+The public classroom uses:
 
 ```text
 assets/data/data.js
 ```
 
-Future implementations may load the same project from:
+inside the published GitHub repository.
 
-- Local classroom server
-- Local file
-- Cloud storage
-- District server
-- Other project repositories
+This represents the classroom presented by the public Student Mode.
 
-The remainder of the runtime should remain unchanged regardless of public project source.
+The Working Project and Published Project use the same classroom data structure.
+
+Their difference is lifecycle:
+
+```text
+Working Project
+      │
+      │ Publish
+      ▼
+Published Project
+```
+
+Editing the Working Project does not immediately change the public classroom.
+
+Publishing is an explicit operation.
 
 ---
 
 # Project Loading
 
-The Project Loader is responsible for obtaining a valid Project.
+The Project Loader is responsible for obtaining a Project.
 
 The Project Loader should know:
 
-- Where projects originate
-- How projects are deserialized
-- How projects become Project objects
+- Where the appropriate project originates
+- How project data is obtained
+- How project data becomes the runtime Project representation
 
-The remainder of the application should not know where project data came from.
+The remainder of the application should not depend on the physical project storage location.
 
 ---
 
 # Validation
 
-Validation exists between project loading and runtime execution.
+Validation exists between project loading and runtime execution and also supports Teacher Mode editing.
 
-Validation is divided into independent systems.
-
-Examples include:
+Validation includes independent concerns such as:
 
 - Structural validation
 - Asset validation
 
-Validation should occur before rendering begins.
-
 Whenever practical:
 
-- Structural problems prevent startup.
-- Asset problems generate warnings.
+- Structural problems prevent invalid projects from being published or rendered.
+- Asset problems generate warnings when the classroom can otherwise remain usable.
+
+Validation should protect project integrity without unnecessarily preventing classroom operation.
 
 ---
 
 # Application Controller
 
-The Application Controller coordinates runtime behavior.
+The Student Application Controller coordinates runtime behavior.
 
 Responsibilities include:
 
 - Startup
 - Navigation
-- Viewer management
 - Runtime state
+- Viewer coordination
 - User messages
 - Content launching
+- Published-project refresh
 
-The controller should coordinate behavior rather than implement presentation.
+The controller coordinates behavior rather than implementing presentation details.
 
 ---
 
@@ -427,14 +506,14 @@ The controller should coordinate behavior rather than implement presentation.
 
 Renderers transform project data into browser elements.
 
-Renderers contain presentation logic only.
+Renderers contain presentation logic.
 
 They do not:
 
-- Validate
 - Edit projects
 - Store projects
-- Launch content
+- Publish projects
+- Implement content-specific viewers
 
 Current rendering responsibilities include:
 
@@ -445,174 +524,6 @@ Current rendering responsibilities include:
 - Tile rendering
 
 Additional renderers may be added without affecting existing systems.
-
----
-
-# Action Architecture
-
-Content-specific behavior is isolated into independent action modules.
-
-Examples include:
-
-```text
-video-action.js
-pdf-action.js
-website-action.js
-image-action.js
-powerpoint-action.js
-```
-
-Student Mode requests an action.
-
-The content actions own:
-
-- Opening
-- Closing
-- Cleanup
-- Viewer lifecycle
-
-This allows Student Mode and future Teacher previews to use the same implementation.
-
----
-
-# Asset Architecture
-
-Teacher-managed assets are intentionally separated from application resources.
-
-```
-resources/
-    default-header.jpg
-    default-tile.jpg
-
-assets/
-    data/
-    images/
-    videos/
-    pdfs/
-    powerpoints/
-```
-
-## Resources
-
-Resources belong to the application.
-
-Examples include:
-
-- Default images
-- Built-in graphics
-- Static interface assets
-
-Teachers do not manage resources.
-
-Resources are never included in asset catalogs.
-
----
-
-## Assets
-
-Assets belong to classroom projects.
-
-Examples include:
-
-- Images
-- Videos
-- PDFs
-- PowerPoint presentations
-
-Teacher Mode manages these assets through catalogs and asset pickers.
-
-Asset filenames are stored inside project data.
-
-Asset paths are never stored.
-
----
-
-# Runtime Pipeline
-
-Student Mode performs the following sequence during startup.
-
-```text
-Published Project Source
-        │
-        ▼
-Project Loader
-        │
-        ▼
-Structural Validation
-        │
-        ▼
-Asset Validation
-        │
-        ▼
-Application Initialization
-        │
-        ▼
-Container Rendering
-        │
-        ▼
-User Interaction
-```
-
-Once initialization completes, Student Mode operates entirely in memory.
-
-Navigation never reloads the browser.
-
-Only the currently displayed Container is rendered.
-
----
-
-# Navigation Architecture
-
-Navigation is entirely Container based.
-
-Student Mode never navigates directly to Layout Entries.
-
-Navigation sequence:
-
-```text
-Current Container
-        │
-Navigation Entry Selected
-        │
-Referenced Child Container
-        │
-Render Child Container
-```
-
-The Home button always returns to the root Container.
-
-The Back button always returns to the parent Container.
-
-Browser page reloads should never occur during classroom navigation.
-
----
-
-# Rendering Architecture
-
-Rendering is intentionally modular.
-
-Each renderer performs one responsibility.
-
-Typical rendering responsibilities include:
-
-- Layout Renderer
-- Navigation Renderer
-- Section Renderer
-- Content Renderer
-- Tile Renderer
-
-Renderers should:
-
-- Create browser elements
-- Apply presentation rules
-- Connect interaction callbacks
-
-Renderers should not:
-
-- Validate projects
-- Modify project data
-- Load assets directly
-- Launch classroom content
 
 ---
 
@@ -630,35 +541,161 @@ Every tile shares:
 
 Navigation tiles and content tiles should appear visually consistent.
 
-Differences between tile types should come from icons, labels, and actions rather than entirely different visual components.
+Differences between tile types should come from their content, labels, and actions rather than entirely separate visual implementations.
+
+---
+
+# Navigation Architecture
+
+Navigation is Container based.
+
+Student Mode never navigates directly to Layout Entries.
+
+Navigation follows:
+
+```text
+Current Container
+        │
+Navigation Entry Selected
+        │
+Referenced Child Container
+        │
+Render Child Container
+```
+
+The Home control returns to the root Container.
+
+The Back control returns to the parent Container.
+
+Browser page reloads should not occur during classroom navigation.
+
+Navigation controls should remain optimized for the physical classroom environment and touch-screen use.
+
+---
+
+# Action Architecture
+
+Content-specific behavior is isolated from layout rendering.
+
+Examples include:
+
+- YouTube video playback
+- Local video playback
+- PDF viewing
+- Website launching
+- Image viewing
+
+Student Mode determines the content type and delegates the appropriate behavior.
+
+Content actions own their content-specific lifecycle and cleanup.
+
+This keeps content implementation separate from classroom navigation and rendering.
+
+---
+
+# Video Architecture
+
+The application supports two distinct video sources.
+
+## YouTube Video
+
+Project type:
+
+```text
+video
+```
+
+The `video` type is retained for YouTube content because existing classroom project data already uses this type.
+
+A YouTube entry stores a YouTube URL or compatible video identifier as its target.
+
+The YouTube action is responsible for:
+
+- Interpreting the YouTube target
+- Opening the YouTube player
+- Managing playback
+- Closing the player
+- Releasing player resources
+
+---
+
+## Local Video
+
+Project type:
+
+```text
+localVideo
+```
+
+A Local Video entry references a filename from the teacher-managed Video Library.
+
+Example:
+
+```text
+classroom-song.mp4
+```
+
+The project stores the filename rather than a physical path.
+
+Asset Helpers resolve the filename into the correct working or published video location.
+
+Local video playback uses the browser's HTML5 video player.
+
+The Local Video viewer is responsible for:
+
+- Opening the local video
+- Starting playback when permitted by the browser
+- Providing standard playback controls
+- Closing the player
+- Stopping playback
+- Releasing the loaded video resource
+
+---
+
+## Video Compatibility Rule
+
+The distinction between:
+
+```text
+video
+```
+
+and:
+
+```text
+localVideo
+```
+
+is intentional.
+
+The existing `video` type must not be redefined as local video because doing so would invalidate existing YouTube classroom entries.
+
+New content-type names should preserve existing project semantics whenever practical.
 
 ---
 
 # Viewer Architecture
 
-Large classroom resources open in dedicated viewers rather than replacing the current classroom page.
+Large classroom resources open in dedicated viewers rather than replacing the classroom page.
 
-Current viewers include:
+Current viewer behavior includes:
 
-- Video Viewer
+- YouTube Video Viewer
+- Local Video Viewer
 - PDF Viewer
-
-Future viewers may include:
-
 - Image Viewer
-- Website Viewer
-- PowerPoint Viewer
 
-Each viewer should:
+Other content types may launch through browser-native behavior where appropriate.
+
+Each dedicated viewer should:
 
 - Occupy most of the available screen
 - Display the content title
-- Provide a large Close button
-- Return the student to the previous classroom page
+- Provide an obvious Close control
+- Return the student to the same classroom page
+- Release active resources when closed
 
-Viewers should own their own cleanup logic.
-
-Closing a viewer should completely release any active resources.
+Viewer lifecycle belongs to the content action/controller responsible for that content.
 
 ---
 
@@ -670,40 +707,258 @@ Messages should:
 
 - Be brief
 - Be classroom friendly
-- Automatically disappear
-- Never expose implementation details
+- Automatically disappear where appropriate
+- Never expose unnecessary implementation details
 
-Messages should be coordinated by the Application Controller rather than individual renderers.
+Messages should be coordinated by the Student application rather than individual renderers independently creating their own messaging systems.
+
+---
+
+# Asset Architecture
+
+Teacher-managed assets are intentionally separated from application resources.
+
+Conceptually:
+
+```text
+resources/
+    default-header.jpg
+    default-tile.jpg
+
+assets/
+    data/
+    images/
+    videos/
+    pdfs/
+    powerpoints/
+```
+
+---
+
+# Resources
+
+Resources belong to the application itself.
+
+Examples include:
+
+- Default images
+- Built-in graphics
+- Static interface assets
+
+Teachers do not manage application resources.
+
+Resources do not appear in teacher-managed asset catalogs.
+
+---
+
+# Classroom Assets
+
+Assets belong to classroom projects.
+
+Examples include:
+
+- Images
+- Videos
+- PDFs
+- PowerPoint files retained in the asset structure
+
+Teacher Mode manages supported classroom assets through catalogs and asset pickers.
+
+Project data stores logical filenames.
+
+Project data should not store environment-specific asset paths.
+
+---
+
+# Master Asset Library
+
+The classroom server maintains the authoritative working asset library under:
+
+```text
+/srv/vcc/assets
+```
+
+This contains the working classroom data and teacher-managed classroom assets.
+
+Conceptually:
+
+```text
+/srv/vcc/assets/
+    data/
+    images/
+    videos/
+    pdfs/
+    powerpoints/
+```
+
+This working asset library is separate from the asset copy contained inside the published Git repository.
+
+---
+
+# Asset Helpers
+
+Asset Helpers resolve logical filenames into environment-specific paths.
+
+For example, project data may contain:
+
+```text
+alphabet.jpg
+```
+
+The Asset Helper determines whether the runtime should load it from the working asset library or the published asset library.
+
+This isolates storage knowledge from:
+
+- Project data
+- Renderers
+- Content actions
+
+---
+
+# Working and Published Asset Resolution
+
+Teacher Mode and Student Preview operate against the master working assets.
+
+Conceptually:
+
+```text
+Teacher Mode
+Student Preview
+      │
+      ▼
+/master-assets
+```
+
+Published Student Mode operates against the assets distributed with the public site:
+
+```text
+Published Student
+      │
+      ▼
+assets
+```
+
+Asset Helpers own this distinction.
+
+Project data remains identical in both environments.
+
+---
+
+# Student Preview
+
+Student Preview uses the same Student application used by the published classroom.
+
+Preview Mode is identified through the Student URL:
+
+```text
+student.html?preview=true
+```
+
+Preview resolves classroom assets from the working master asset library.
+
+This allows a teacher to test unpublished classroom changes before publishing them.
+
+The Preview environment should behave as closely as practical to Published Student Mode while using working data and assets.
+
+---
+
+# Asset Catalog Architecture
+
+Teacher-managed assets are discovered through generated catalogs.
+
+Current catalog categories include:
+
+```text
+images
+pdfs
+videos
+powerpoints
+```
+
+Each asset directory may contain a generated:
+
+```text
+catalog.js
+```
+
+Catalogs provide:
+
+- Filename discovery
+- Search support
+- Picker population
+
+Catalogs expose logical filenames rather than physical storage paths.
+
+---
+
+# Update Library
+
+Teacher Mode provides an Update Library operation.
+
+Update Library asks the classroom server to rescan the master asset directories and regenerate the asset catalogs.
+
+The updated catalog information is then made available to Teacher Mode.
+
+This allows files placed into the master asset library to become available to teacher asset pickers without manually editing project data.
+
+---
+
+# Asset Picker Architecture
+
+Teacher Mode selects supported assets through picker dialogs.
+
+Current picker functionality includes:
+
+- Image Picker
+- PDF Picker
+- Video Picker
+
+Asset pickers:
+
+- Load from asset catalogs
+- Support selection of available files
+- Return filenames only
+- Never return environment-specific storage paths
+
+The Project stores the selected filename.
+
+Asset Helpers determine where that file is loaded from at runtime.
 
 ---
 
 # Teacher Mode Architecture
 
-Teacher Mode is a separate application built on the same Project structure.
+Teacher Mode is a separate application built on the same Project structure used by Student Mode.
 
 Student Mode presents Projects.
 
-Teacher Mode creates and modifies Projects.
+Teacher Mode modifies Projects.
 
-Both modes operate on the same underlying classroom definition.
+Both operate on the same classroom definition.
+
+Teacher Mode communicates with the classroom server for persistent project and asset operations.
 
 ---
 
 # Teacher Mode Goals
 
-Teacher Mode is intended to allow non-technical teachers to build complete classroom experiences without editing source code.
+Teacher Mode allows a non-technical teacher to build and maintain the classroom without editing source code.
 
-Teacher Mode should eventually support:
+Current Teacher Mode supports core operations including:
 
-- Creating pages
-- Organizing page hierarchy
-- Editing page properties
-- Managing classroom assets
-- Creating classroom activities
+- Creating subpages
+- Deleting pages
+- Editing page/navigation properties
+- Adding classroom tiles
+- Adding sections
+- Editing layout entries
+- Deleting supported layout entries
+- Reordering layout entries
+- Updating the asset library
 - Previewing classroom behavior
-- Publishing projects
+- Publishing the classroom
 
-Teachers should never edit JavaScript or JSON directly.
+Teachers should not need to understand the underlying JSON or JavaScript representation.
 
 ---
 
@@ -729,7 +984,7 @@ The workspace separates:
 - Current page contents
 - Editing commands
 
-This organization allows teachers to focus on one task at a time.
+This organization allows the teacher to focus on one task at a time.
 
 ---
 
@@ -745,7 +1000,7 @@ The tree should:
 - Indicate inactive pages
 - Clearly identify the selected page
 
-The tree represents navigation only.
+The tree represents navigation hierarchy.
 
 It does not represent layout order.
 
@@ -755,76 +1010,40 @@ It does not represent layout order.
 
 The Page Layout panel displays the ordered contents of the selected page.
 
-Entries currently include:
+Current Teacher-created entries include:
 
 - Sections
 - Navigation
-- Videos
+- YouTube Videos
+- Local Videos
 - PDFs
 - Images
 - Websites
-- PowerPoints
-- Information
 - Placeholders
 
-Each row should display:
-
-- Thumbnail
-- Entry icon
-- Entry name
+Each row should provide enough information for the teacher to identify the item being edited.
 
 The layout editor represents presentation order rather than navigation hierarchy.
 
 ---
 
-# Asset Helpers
+# Navigation Integrity
 
-Asset Helpers resolve logical filenames into storage-specific paths.
+Navigation entries represent relationships to child Containers.
 
-Example:
+Navigation entries should not be independently deleted in a way that leaves orphaned Containers.
 
-alphabet.jpg
+Deleting a page is responsible for removing the navigation relationship associated with that page.
 
-↓
-
-assets/images/alphabet.jpg
-
-This isolates storage knowledge into one location and allows storage implementations to change without affecting renderers or project data.
-
----
-
-# Project Model
-
-The Project Model is the editable representation of the classroom.
-
-The Project Model exists only while a project is being edited and is reconstructed whenever a project is opened.
-
-Every modification performed by Teacher Mode occurs through the Project Model.
-
-Typical operations include:
-
-- Create Container
-- Rename Container
-- Delete Container
-- Move Container
-- Enable Container
-- Disable Container
-- Add Layout Entry
-- Delete Layout Entry
-- Move Layout Entry
-- Modify Properties
-
-The Project Model maintains project integrity throughout editing.
+Teacher Mode should protect these structural relationships rather than allowing edits that create inconsistent project hierarchy.
 
 ---
 
 # Validation During Editing
 
-Teacher Mode performs validation continuously.
+Teacher Mode uses validation to protect project integrity.
 
-Validation should occur as edits are made rather than only during publishing.
-
-Validation categories currently include:
+Validation categories include:
 
 ## Structural Validation
 
@@ -835,8 +1054,9 @@ Examples:
 - Missing Containers
 - Invalid navigation
 - Duplicate identifiers
+- Unsupported entry structures
 
-Structural problems prevent publishing.
+Structural problems should prevent invalid publication where appropriate.
 
 ---
 
@@ -847,440 +1067,236 @@ Examples:
 - Missing images
 - Missing PDFs
 - Missing videos
-- Missing PowerPoint files
 
-Asset problems generate warnings whenever practical.
-
-Publishing should remain possible unless a missing asset would produce an unusable classroom.
+Asset problems should generate useful warnings whenever the classroom can otherwise remain operational.
 
 ---
 
-# Asset Catalog Architecture
+# Server API
 
-Teacher-managed assets are discovered through generated catalogs.
+The classroom server provides a small application API used by Teacher Mode.
 
-Current catalogs include:
+Its responsibilities include:
 
-```text
-assets/images/catalog.js
-assets/pdfs/catalog.js
-```
+- Health/status communication
+- Reading the Working Project
+- Writing the Working Project
+- Rebuilding asset catalogs
+- Publishing the classroom
 
-Future catalogs may include:
+The server API forms the boundary between the browser-based Teacher application and server-side storage/publishing operations.
 
-```text
-assets/videos/catalog.js
-assets/powerpoints/catalog.js
-```
-
-Catalogs provide:
-
-- Filename discovery
-- Search support
-- Picker population
-
-Catalogs intentionally expose filenames only.
-
-They never expose storage paths.
-
----
-
-# Asset Picker Architecture
-
-Teacher Mode selects assets through picker dialogs.
-
-Current pickers include:
-
-- Image Picker
-- PDF Picker
-
-Future pickers may include:
-
-- Video Picker
-- PowerPoint Picker
-
-Asset pickers:
-
-- Load from catalogs
-- Return filenames only
-- Never return storage paths
-
-The Project Model stores only filenames.
-
-Asset helper functions determine where files are actually located.
-
----
-
-# Project Storage
-
-The application distinguishes between:
-
-- Working Project
-- Published Project
-
-The Working Project is edited by Teacher Mode.
-
-The Published Project is presented by Student Mode.
-
-This separation allows editing without immediately affecting classroom presentation.
-
-Current working storage uses browser Local Storage.
-
-This implementation is expected to evolve without affecting Teacher Mode.
+Teacher Mode should request these operations through the API rather than directly manipulating server files.
 
 ---
 
 # Publishing Architecture
 
-Publishing is intentionally isolated from editing.
+Publishing is intentionally separated from editing.
 
-Teacher Mode edits the Project Model.
+Teacher Mode modifies the Working Project.
 
-Publishing distributes a serialized representation of that Project.
+Publishing distributes a validated snapshot of the working classroom to the public Student environment.
 
-Teacher Mode should not know where published projects are stored.
+Conceptually:
 
-Instead, publishing should operate through a publishing layer.
+```text
+Working Classroom
+       │
+       ▼
+Update Catalogs
+       │
+       ▼
+Prepare Published Assets
+       │
+       ▼
+Git Repository
+       │
+       ▼
+GitHub
+       │
+       ▼
+GitHub Pages
+       │
+       ▼
+Published Student Mode
+```
 
-Future publishing destinations may include:
+Publishing is an explicit teacher action.
 
-- Download
-- Local classroom server
-- Cloud service
-- District server
-
-The editing workflow should remain unchanged regardless of publishing destination.
+Editing alone should never modify the public classroom.
 
 ---
 
-# Published Project Format
+# Current Publishing Pipeline
 
-The canonical published classroom project is:
+The classroom server currently performs the publication process.
+
+The publishing operation:
+
+1. Rebuilds the classroom asset catalogs.
+2. Copies the working asset library into the repository's published `assets` structure.
+3. Stages the published asset changes in Git.
+4. Determines whether publishable asset changes exist.
+5. Commits the changes when necessary.
+6. Pushes the changes to GitHub.
+7. GitHub Pages serves the updated public Student site.
+
+If there are no publishable changes, Teacher Mode reports that the classroom is already up to date.
+
+Publishing errors are reported to the teacher without silently claiming success.
+
+---
+
+# GitHub Deployment
+
+GitHub provides two current architectural functions:
+
+## Source Control
+
+The VCC application source is maintained in Git.
+
+## Public Classroom Hosting
+
+GitHub Pages hosts the public Student application and its published classroom assets.
+
+The public Student site does not depend on the classroom Beelink being available.
+
+This is an important reliability boundary:
+
+```text
+Beelink
+  = Editing and Publishing Environment
+
+GitHub Pages
+  = Public Student Environment
+```
+
+A classroom server outage therefore does not inherently remove the already-published Student classroom.
+
+---
+
+# Published Classroom Refresh
+
+Published Student Mode periodically checks the published classroom data for changes.
+
+The runtime checks:
 
 ```text
 assets/data/data.js
 ```
 
-This file represents the classroom presented by Student Mode.
+without relying on a cached copy.
 
-The application should eventually treat this file as the published artifact regardless of how it was produced.
+When the published project changes:
 
-Current deployment may generate this file for manual distribution.
+1. The new project data is detected.
+2. Student Mode loads the updated classroom.
+3. The current classroom interface is rerendered.
+4. A classroom-friendly update message is displayed.
 
-Future deployment may replace the same file automatically on a classroom server.
+This allows an already-open Student classroom to receive newly published classroom content without requiring a manual browser reload.
 
-Student Mode should remain unaware of how the file arrived.
-
----
-
-# Deployment Architecture
-
-The VCC Classroom Launcher is designed so that deployment mechanisms can evolve without requiring changes to Student Mode or Teacher Mode.
-
-The application should remain independent of:
-
-- Hosting platform
-- Storage mechanism
-- Publishing destination
-
-Deployment should be considered an implementation detail rather than an architectural dependency.
+Student Preview does not perform this published-project polling behavior.
 
 ---
 
-# Current Deployment
+# Runtime Pipeline
 
-Current development uses the following workflow:
+Published Student Mode conceptually performs:
 
 ```text
-Teacher Mode
-        │
-        ▼
-Project Model
-        │
-        ▼
-Publish
-        │
-        ├── Update Local Working Project
-        │
-        └── Generate assets/data/data.js
-                     │
-                     ▼
-               Manual Distribution
-                     │
-                     ▼
-                 GitHub Pages
-```
-
-This workflow allows classroom content to be edited without requiring cloud infrastructure.
-
-The generated `assets/data/data.js` file represents the published classroom.
-
----
-
-# Local Working Project
-
-Teacher Mode maintains a local working copy of the classroom.
-
-Current implementation uses browser Local Storage.
-
-Local Storage exists only to support editing.
-
-It should not be considered the permanent storage architecture.
-
-Future implementations may replace Local Storage without affecting Teacher Mode.
-
----
-
-# Published Project
-
-The published classroom consists of the serialized Project.
-
-Current published artifact:
-
-```text
-assets/data/data.js
-```
-
-Student Mode always presents the published Project.
-
-The publishing mechanism determines how this file reaches the runtime.
-
-Student Mode should remain unaware of:
-
-- Local Storage
-- GitHub
-- Cloud services
-- Classroom servers
-
----
-
-# Publishing Pipeline
-
-Publishing should always follow the same conceptual sequence.
-
-```text
-Project Model
-        │
-        ▼
+Published Project
+       │
+       ▼
+Project Loading
+       │
+       ▼
 Validation
-        │
-        ▼
-Serialization
-        │
-        ▼
-Published Project
-        │
-        ▼
-Publishing Destination
+       │
+       ▼
+Application Initialization
+       │
+       ▼
+Container Rendering
+       │
+       ▼
+User Interaction
+       │
+       ├── Navigation
+       ├── Content Actions
+       └── Published Project Refresh
 ```
 
-The publishing destination may change over time.
+Once initialized, normal classroom navigation operates in memory.
 
-The serialization process should not.
+Navigation between Containers does not reload the browser.
 
 ---
 
-# Publishing Interface
+# Current Deployment Architecture
 
-Publishing should eventually become an independent architectural subsystem.
-
-Teacher Mode should simply request publication.
-
-Example:
+The deployed architecture is:
 
 ```text
-Teacher Mode
-      │
-Publish
-      │
-Publishing Interface
-      │
-Destination
+                 CLASSROOM SERVER
+                     Beelink
+                        │
+        ┌───────────────┼────────────────┐
+        │               │                │
+        ▼               ▼                ▼
+   Teacher Mode    Working Project   Master Assets
+                        │                │
+                        └───────┬────────┘
+                                │
+                                ▼
+                         Student Preview
+                                │
+                                │ Publish
+                                ▼
+                         Publishing Service
+                                │
+                                ▼
+                          Git Repository
+                                │
+                                ▼
+                             GitHub
+                                │
+                                ▼
+                          GitHub Pages
+                                │
+                                ▼
+                     Published Student Mode
 ```
 
-The editor should not know:
-
-- Where the project is stored
-- How it is transferred
-- Whether it is uploaded, downloaded, or copied
-
----
-
-# Publishing Destinations
-
-The architecture intentionally supports multiple publishing destinations.
-
-Examples include:
-
-## Manual Download
-
-Teacher Mode generates:
-
-```text
-assets/data/data.js
-```
-
-The teacher distributes the file manually.
-
----
-
-## Classroom Server
-
-Teacher Mode sends the published Project to a classroom server.
-
-The classroom server replaces:
-
-```text
-assets/data/data.js
-```
-
-Student Mode immediately begins presenting the new classroom.
-
----
-
-## Cloud Publishing
-
-Teacher Mode uploads the Project to a hosted service.
-
-The service distributes the published classroom.
-
----
-
-## District Repository
-
-Future deployments may publish directly into district-managed classroom repositories.
-
-The publishing interface should remain unchanged.
-
----
-
-# Future Classroom Server
-
-The preferred long-term deployment target is a dedicated classroom Mini-PC.
-
-The Mini-PC should eventually host:
-
-- Student website
-- Teacher website
-- Published classroom data
-- Classroom assets
-- Authentication
-- Backups
-- Future classroom services
-
-The classroom server becomes the authoritative published environment.
-
-Teacher Mode continues using the same editing workflow.
-
-Only the publishing destination changes.
-
----
-
-# Migration Path
-
-The architecture intentionally supports gradual migration.
-
-## Stage 1
-
-Working Project
-
-```text
-Browser Local Storage
-```
-
-Published Project
-
-```text
-assets/data/data.js
-```
-
-Manual distribution.
-
----
-
-## Stage 2
-
-Working Project
-
-```text
-Browser Local Storage
-```
-
-Published Project
-
-```text
-assets/data/data.js
-```
-
-Automatically copied to the classroom server.
-
----
-
-## Stage 3
-
-Working Project
-
-Classroom server.
-
-Published Project
-
-Classroom server.
-
-Teacher Mode edits and publishes directly through the classroom network.
-
----
-
-## Stage 4
-
-Multiple authenticated teachers.
-
-Shared classroom projects.
-
-Version history.
-
-Optional cloud synchronization.
-
-The editing workflow should remain unchanged throughout every stage.
-
----
-
-# Asset Evolution
-
-Teacher-managed assets should follow the same migration path as project data.
-
-Current organization:
-
-```text
-assets/
-    data/
-    images/
-    videos/
-    pdfs/
-    powerpoints/
-```
-
-Future deployments should preserve this organization regardless of storage implementation.
-
-Changing storage location should never require changing project data.
+This separation provides:
+
+- Safe editing
+- Local preview
+- Explicit publication
+- Public availability independent of the classroom server
+- Source-controlled published content
 
 ---
 
 # Architectural Boundaries
 
-Each major subsystem owns a single responsibility.
+Each major subsystem owns a primary responsibility.
 
-| System         | Responsibility                            |
-| -------------- | ----------------------------------------- |
-| Project Loader | Obtain published Project                  |
-| Validators     | Verify Project integrity                  |
-| Renderers      | Create interface                          |
-| Actions        | Launch classroom content                  |
-| Project Model  | Maintain editable Project                 |
-| Teacher Mode   | Edit Projects                             |
-| Publishing     | Produce and distribute published Projects |
-| Asset Helpers  | Resolve storage locations                 |
+| System | Responsibility |
+| --- | --- |
+| Project Loader | Obtain classroom Project |
+| Validators | Verify Project integrity |
+| Renderers | Create classroom interface |
+| Content Actions | Launch and manage classroom content |
+| Project Model | Maintain editable Project |
+| Teacher Mode | Provide classroom editing interface |
+| Server API | Provide persistent classroom operations |
+| Publishing | Produce and distribute published classroom |
+| Asset Helpers | Resolve environment-specific asset locations |
+| Asset Catalogs | Describe available teacher-managed assets |
 
-No subsystem should assume responsibility belonging to another.
+No subsystem should unnecessarily assume responsibility belonging to another.
 
 ---
 
@@ -1290,18 +1306,53 @@ The current architecture intentionally leaves room for future expansion.
 
 Possible future systems include:
 
+- Automatic backups
+- Restore points
 - User authentication
+- Multiple teachers
+- Multiple classroom sites
 - Classroom templates
-- Asset library
+- Expanded asset library management
 - Version history
 - Undo / Redo
 - Shared classroom repositories
 - District deployment
 - Cloud synchronization
-- Automatic backups
 - Classroom analytics
 
-These systems should be implemented as new architectural layers rather than modifications to existing runtime systems.
+These systems should extend existing architectural boundaries rather than bypass them.
+
+---
+
+# Backup Architecture Direction
+
+Future backup functionality should protect the complete working classroom rather than project data alone.
+
+The authoritative backup scope should include:
+
+```text
+/srv/vcc/assets
+```
+
+because classroom integrity depends on both:
+
+- Project data
+- Classroom assets
+
+The planned backup model distinguishes between:
+
+- Automatic restore points associated with publishing
+- Manually named saved restore points
+
+Restoring a backup should restore the Working Classroom first.
+
+The teacher should then be able to:
+
+1. Review the restored classroom.
+2. Open Student Preview.
+3. Explicitly Publish when satisfied.
+
+Restore operations should not automatically change the public classroom.
 
 ---
 
@@ -1311,7 +1362,7 @@ The following rules should guide future development.
 
 ## Project data stores logical information only.
 
-Never store storage-specific paths inside project data.
+Never store environment-specific asset paths inside project data.
 
 ---
 
@@ -1319,37 +1370,64 @@ Never store storage-specific paths inside project data.
 
 Assets belong to classroom projects.
 
-Application resources should never appear inside teacher-managed asset catalogs.
+Application resources should not appear inside teacher-managed asset catalogs.
+
+---
+
+## Working and Published environments remain separate.
+
+Teacher Mode edits the Working Classroom.
+
+Preview presents the Working Classroom.
+
+Published Student Mode presents the Published Classroom.
 
 ---
 
 ## Editing and publishing remain independent.
 
-Teacher Mode edits.
+Editing changes the Working Project.
 
-Publishing distributes.
+Publishing distributes it.
 
-Student Mode presents.
+Student Mode presents it.
+
+---
+
+## Publishing remains explicit.
+
+A teacher edit should never automatically change the public classroom.
+
+The teacher should be able to Preview before Publish.
 
 ---
 
 ## Storage should remain replaceable.
 
-Changing storage should not require changes to:
+Changing storage or public hosting should not require redesign of:
 
-- Student Mode
-- Teacher Mode
+- Project data
 - Renderers
 - Validators
-- Actions
+- Content actions
+
+Storage-specific knowledge belongs at defined architectural boundaries.
 
 ---
 
-## Presentation and implementation remain separate.
+## Presentation and project data remain separate.
 
 Changing how something looks should not require changing project data.
 
 Changing project data should not require changing presentation logic.
+
+---
+
+## Preserve backward compatibility when practical.
+
+Existing project data should not be invalidated merely to make naming or implementation cleaner.
+
+The `video` / `localVideo` distinction is an example of this rule.
 
 ---
 
@@ -1363,28 +1441,67 @@ Whenever practical:
 - Reuse renderers
 - Reuse asset helpers
 - Reuse pickers
-- Reuse actions
+- Reuse validation
+- Reuse content-action patterns
 
 before introducing new implementations.
 
 ---
 
+## Classroom usability drives presentation decisions.
+
+The application is designed for a large classroom touch display.
+
+Presentation and control placement should therefore prioritize:
+
+- Touch accessibility
+- Large interaction targets
+- Minimal classroom disruption
+- Simple navigation
+- Clear feedback
+
+These are presentation concerns and should generally be implemented without changing the underlying Project structure.
+
+---
+
 # Summary
 
-The VCC Classroom Launcher is organized around independent architectural systems that each perform a single responsibility.
+The VCC Classroom Launcher uses a deliberately separated working and published architecture.
 
-The architecture intentionally separates:
+The classroom server provides the authoring environment:
+
+```text
+Teacher Mode
+Working Project
+Master Assets
+Student Preview
+Publishing
+```
+
+GitHub Pages provides the public classroom environment:
+
+```text
+Published Project
+Published Assets
+Student Mode
+```
+
+Project data remains independent of these physical storage locations.
+
+The architecture separates:
 
 - Editing
 - Storage
-- Rendering
+- Loading
 - Validation
+- Rendering
+- Content actions
 - Assets
 - Publishing
 - Presentation
 
-This separation allows the application to evolve from a locally edited classroom launcher into a complete classroom authoring platform without requiring major architectural redesign.
+This allows the application to evolve without requiring major architectural redesign.
 
-The guiding architectural principle is:
+The guiding architectural principle remains:
 
 > **Projects define classrooms. Student Mode presents Projects. Teacher Mode creates Projects. Publishing distributes Projects.**

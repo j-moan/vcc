@@ -3,6 +3,7 @@
 const SUPPORTED_LAYOUT_TYPES = new Set([
   "navigation",
   "section",
+  "localVideo",
   "video",
   "website",
   "pdf",
@@ -12,7 +13,14 @@ const SUPPORTED_LAYOUT_TYPES = new Set([
   "placeholder",
 ]);
 
-const CONTENT_TYPES_REQUIRING_TARGET = new Set(["video", "website", "pdf", "powerpoint", "image"]);
+const CONTENT_TYPES_REQUIRING_TARGET = new Set([
+  "localVideo",
+  "video",
+  "website",
+  "pdf",
+  "powerpoint",
+  "image",
+]);
 
 export function validateProject(project) {
   const result = {

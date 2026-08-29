@@ -191,7 +191,8 @@
         <label for="tile-type-select">Type:</label>
         <select id="tile-type-select" class="dialog-input">
           <option value="placeholder">Placeholder</option>
-          <option value="video">Video</option>
+          <option value="video">YouTube</option>
+          <option value="localVideo">Video</option>
           <option value="website">Website</option>
           <option value="pdf">PDF</option>
           <option value="image">Image</option>
@@ -386,9 +387,56 @@
       </form>
     </dialog>
 
+    <dialog
+      id="video-picker-dialog"
+      class="app-dialog pdf-picker-dialog"
+      aria-labelledby="video-picker-title"
+    >
+      <form id="video-picker-form" class="dialog-form" method="dialog">
+        <h2 id="video-picker-title" class="dialog-title">Choose Video</h2>
+
+        <label for="video-search-input">Search:</label>
+
+        <input
+          id="video-search-input"
+          class="dialog-input"
+          type="search"
+          autocomplete="off"
+          placeholder="Type part of the filename"
+        />
+
+        <div
+          id="video-picker-list"
+          class="pdf-picker-list"
+          role="listbox"
+          aria-label="Available video files"
+        ></div>
+
+        <div class="dialog-actions">
+          <button
+            id="cancel-video-picker-button"
+            class="dialog-button dialog-button-secondary"
+            type="button"
+          >
+            Cancel
+          </button>
+
+          <button
+            id="select-video-button"
+            class="dialog-button dialog-button-primary"
+            type="submit"
+            disabled
+          >
+            Select
+          </button>
+        </div>
+      </form>
+    </dialog>
+
     <script src="/master-assets/data/data.js"></script>
     <script src="/master-assets/images/catalog.js"></script>
     <script src="/master-assets/pdfs/catalog.js"></script>
+    <script src="/master-assets/videos/catalog.js"></script>
     <script type="module" src="teacher.js"></script>
   </body>
 </html>

@@ -4,7 +4,14 @@ import { renderNavigationEntry } from "./navigation-renderer.js";
 import { renderSectionEntry } from "./section-renderer.js";
 import { renderContentEntry } from "./content-renderer.js";
 
-const CONTENT_ENTRY_TYPES = new Set(["video", "website", "pdf", "image", "placeholder"]);
+const CONTENT_ENTRY_TYPES = new Set([
+  "video",
+  "localVideo",
+  "website",
+  "pdf",
+  "image",
+  "placeholder",
+]);
 
 export function renderLayout(context) {
   const { container, defaultColumns } = context;
