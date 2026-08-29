@@ -878,7 +878,24 @@ window.CLASSROOM_SITE = {
       "parent": "relaxing-videos-2",
       "active": true,
       "children": [],
-      "layout": []
+      "layout": [
+        {
+          "id": "tile-1788037593797-e34632428bcbc8",
+          "type": "localVideo",
+          "label": "Kids in class",
+          "image": "Children_sitting_in_classroom_202608291425.jpeg",
+          "target": "Children_in_classroom_and_playgr…_202608291428.mp4",
+          "active": true
+        },
+        {
+          "id": "tile-1788037622342-af26501b9d91c",
+          "type": "video",
+          "label": "Hello song",
+          "image": "Hello Song Video Image.png",
+          "target": "https://www.youtube.com/watch?v=9OPYT7UMa5w",
+          "active": true
+        }
+      ]
     },
     "october-november": {
       "title": "October & November",
