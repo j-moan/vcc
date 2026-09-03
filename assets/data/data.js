@@ -13,10 +13,11 @@ window.CLASSROOM_SITE = {
         "morning-meeting",
         "calendar",
         "movement",
+        "brushing-teeth-songs",
         "unique-learning",
         "reading",
         "snack-time-videos",
-        "brushing-teeth-songs"
+        "colors"
       ],
       "layout": [
         {
@@ -46,6 +47,11 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "movement",
           "image": "movement fast kid.jpg"
+        },
+        {
+          "type": "navigation",
+          "container": "brushing-teeth-songs",
+          "image": ""
         },
         {
           "id": "tile-1787697601789-f83cbb353345f",
@@ -100,7 +106,7 @@ window.CLASSROOM_SITE = {
         },
         {
           "type": "navigation",
-          "container": "brushing-teeth-songs",
+          "container": "colors",
           "image": ""
         }
       ]
@@ -591,6 +597,22 @@ window.CLASSROOM_SITE = {
           "active": true
         },
         {
+          "id": "tile-1788477103790-2ffb2af80c254",
+          "type": "video",
+          "label": "What's the Weather",
+          "image": "Whats the weather song.jpg",
+          "target": "https://www.youtube.com/watch?v=Jn7uAsLWXpk&list=RDJn7uAsLWXpk&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1788477178950-51e55b9d850ee",
+          "type": "video",
+          "label": "Weather Song",
+          "image": "weather song.jpg",
+          "target": "https://www.youtube.com/watch?v=uChpmwpKpRQ&list=RDuChpmwpKpRQ&start_radio=1",
+          "active": true
+        },
+        {
           "id": "section-1786918944678-7565183da3af8",
           "type": "section",
           "label": "Days of the Week",
@@ -974,6 +996,47 @@ window.CLASSROOM_SITE = {
           "label": "Brushing Teeth - Noodle",
           "image": "Brush teeth noodle.jpg",
           "target": "https://www.youtube.com/watch?v=ENAMlqxqZRI&list=RDENAMlqxqZRI&start_radio=1",
+          "active": true
+        }
+      ]
+    },
+    "colors": {
+      "title": "Colors",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1788477647559-9de023ea8aab5",
+          "type": "video",
+          "label": "Colors Song",
+          "image": "color song .jpg",
+          "target": "https://www.youtube.com/watch?v=zpf2byqIeCY&list=RDzpf2byqIeCY&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1788477864646-3d380d005d3ae8",
+          "type": "video",
+          "label": "Color Vocabulary 1",
+          "image": "color quiz song fun kids english.jpg",
+          "target": "https://www.youtube.com/watch?v=xoamCzuQjy0",
+          "active": true
+        },
+        {
+          "id": "tile-1788478279495-f2fb83fdaa426",
+          "type": "video",
+          "label": "PreSchool Colors",
+          "image": "colors video.jpg",
+          "target": "https://www.youtube.com/watch?v=qhOTU8_1Af4",
+          "active": true
+        },
+        {
+          "id": "tile-1788477974334-b0a254cff9ae58",
+          "type": "video",
+          "label": "Colors Vocabulary - Tora",
+          "image": "color song tora.jpg",
+          "target": "https://www.youtube.com/watch?v=jUqovcOTWhY",
           "active": true
         }
       ]

@@ -27,6 +27,9 @@ window.CLASSROOM_IMAGES = [
   "Chicka Chicka Boom Boom.jpg",
   "Children_sitting_in_classroom_202608291425.jpeg",
   "Clean up.jpg",
+  "color quiz song fun kids english.jpg",
+  "color song .jpg",
+  "color song tora.jpg",
   "colors video.jpg",
   "count to 10 song.jpg",
   "count to 20 song.jpg",
@@ -104,8 +107,10 @@ window.CLASSROOM_IMAGES = [
   "Tuesday song.jpg",
   "UnderConstruction.jpg",
   "Video Image Snoopy Scuba.jpg",
+  "weather song.jpg",
   "Wednesday Song.jpg",
   "what color are they.jpg",
   "what shape.jpg",
+  "Whats the weather song.jpg",
   "white shoes.jpg"
 ];
