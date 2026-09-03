@@ -275,12 +275,12 @@ window.CLASSROOM_SITE = {
         {
           "type": "navigation",
           "container": "head-to-toe",
-          "image": ""
+          "image": "Head to Toe.jpg"
         },
         {
           "type": "navigation",
           "container": "pete-the-cat-white-shoes",
-          "image": ""
+          "image": "Pete White Shoes.jpg"
         }
       ]
     },
@@ -541,7 +541,7 @@ window.CLASSROOM_SITE = {
           "id": "tile-1786920142495-87f8f05c8f36e",
           "type": "video",
           "label": "I Love My White Shoes - Read Aloud",
-          "image": "",
+          "image": "Pete White Shoes.jpg",
           "target": "https://www.youtube.com/watch?v=3ucxf9oTpa0",
           "active": true
         }
