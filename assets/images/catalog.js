@@ -26,6 +26,7 @@ window.CLASSROOM_IMAGES = [
   "can you do it I can.jpg",
   "Chicka Chicka Boom Boom.jpg",
   "Children_sitting_in_classroom_202608291425.jpeg",
+  "clean spray wipe.jpg",
   "Clean up.jpg",
   "color quiz song fun kids english.jpg",
   "color song .jpg",

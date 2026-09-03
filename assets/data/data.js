@@ -12,12 +12,13 @@ window.CLASSROOM_SITE = {
         "relaxing-videos-2",
         "morning-meeting",
         "calendar",
-        "movement",
+        "colors",
         "brushing-teeth-songs",
+        "clean-up-goodbye",
         "unique-learning",
         "reading",
         "snack-time-videos",
-        "colors"
+        "movement"
       ],
       "layout": [
         {
@@ -45,42 +46,23 @@ window.CLASSROOM_SITE = {
         },
         {
           "type": "navigation",
-          "container": "movement",
-          "image": "movement fast kid.jpg"
+          "container": "colors",
+          "image": "colors video.jpg"
         },
         {
           "type": "navigation",
           "container": "brushing-teeth-songs",
-          "image": ""
+          "image": "brush teeth monster.jpg"
         },
         {
-          "id": "tile-1787697601789-f83cbb353345f",
-          "type": "video",
-          "label": "Everybody Clean Up",
-          "image": "Clean up.jpg",
-          "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
-          "active": true
-        },
-        {
-          "id": "tile-1787697504429-6921de528c30c",
-          "type": "video",
-          "label": "Tidy Up Song",
-          "image": "time to Clean Up Song.jpg",
-          "target": "https://www.youtube.com/watch?v=gPq7wzGEjqE&list=RDgPq7wzGEjqE&start_radio=1",
-          "active": true
-        },
-        {
-          "id": "tile-1787697170661-20fa545fd9f2a",
-          "type": "video",
-          "label": "Time to Go Home",
-          "image": "Time to Go Home Goodbye.jpg",
-          "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
-          "active": true
+          "type": "navigation",
+          "container": "clean-up-goodbye",
+          "image": "clean spray wipe.jpg"
         },
         {
           "id": "section-1786919626615-04a6cd3f15a2a",
           "type": "section",
-          "label": "Reading",
+          "label": "Reading & Chill Time",
           "active": true
         },
         {
@@ -99,15 +81,15 @@ window.CLASSROOM_SITE = {
           "image": "Mickey Mouse.jpg"
         },
         {
+          "type": "navigation",
+          "container": "movement",
+          "image": "movement fast kid.jpg"
+        },
+        {
           "id": "section-1787699285951-89d7b6c5d9899",
           "type": "section",
           "label": ".",
           "active": true
-        },
-        {
-          "type": "navigation",
-          "container": "colors",
-          "image": ""
         }
       ]
     },
@@ -566,7 +548,7 @@ window.CLASSROOM_SITE = {
       ]
     },
     "calendar": {
-      "title": "Calendar",
+      "title": "Calendar & Weather",
       "subtitle": "",
       "parent": "home",
       "active": true,
@@ -1037,6 +1019,47 @@ window.CLASSROOM_SITE = {
           "label": "Colors Vocabulary - Tora",
           "image": "color song tora.jpg",
           "target": "https://www.youtube.com/watch?v=jUqovcOTWhY",
+          "active": true
+        }
+      ]
+    },
+    "clean-up-goodbye": {
+      "title": "Clean Up & Goodbye",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1788478950127-aa5e03bf9c00e",
+          "type": "video",
+          "label": "Wipe the Mess Away",
+          "image": "clean spray wipe.jpg",
+          "target": "https://youtu.be/KSMoj3j9bho",
+          "active": true
+        },
+        {
+          "id": "tile-1788479059591-b6b9732570e5f",
+          "type": "video",
+          "label": "Everybody Clean Up",
+          "image": "Clean up.jpg",
+          "target": "https://www.youtube.com/watch?v=oY-H2WGThc8&list=RDoY-H2WGThc8&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1788479107495-abf1789a74569",
+          "type": "video",
+          "label": "Tidy Up Song",
+          "image": "time to Clean Up Song.jpg",
+          "target": "https://www.youtube.com/watch?v=gPq7wzGEjqE&list=RDgPq7wzGEjqE&start_radio=1",
+          "active": true
+        },
+        {
+          "id": "tile-1788479187895-827ebd9e384f8",
+          "type": "video",
+          "label": "Time to Go Home",
+          "image": "Time to Go Home Goodbye.jpg",
+          "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
           "active": true
         }
       ]
