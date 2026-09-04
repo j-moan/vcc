@@ -13,9 +13,9 @@ window.CLASSROOM_SITE = {
         "morning-meeting",
         "calendar",
         "colors",
+        "shapes",
         "brushing-teeth-songs",
         "clean-up-goodbye",
-        "shapes",
         "unique-learning",
         "reading",
         "snack-time-videos",
@@ -52,6 +52,11 @@ window.CLASSROOM_SITE = {
         },
         {
           "type": "navigation",
+          "container": "shapes",
+          "image": "shapes learning song.jpg"
+        },
+        {
+          "type": "navigation",
           "container": "brushing-teeth-songs",
           "image": "brush teeth monster.jpg"
         },
@@ -59,11 +64,6 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "clean-up-goodbye",
           "image": "clean spray wipe.jpg"
-        },
-        {
-          "type": "navigation",
-          "container": "shapes",
-          "image": "shapes learning song.jpg"
         },
         {
           "id": "section-1786919626615-04a6cd3f15a2a",
