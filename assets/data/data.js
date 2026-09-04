@@ -15,6 +15,7 @@ window.CLASSROOM_SITE = {
         "colors",
         "brushing-teeth-songs",
         "clean-up-goodbye",
+        "shapes",
         "unique-learning",
         "reading",
         "snack-time-videos",
@@ -58,6 +59,11 @@ window.CLASSROOM_SITE = {
           "type": "navigation",
           "container": "clean-up-goodbye",
           "image": "clean spray wipe.jpg"
+        },
+        {
+          "type": "navigation",
+          "container": "shapes",
+          "image": "shapes learning song.jpg"
         },
         {
           "id": "section-1786919626615-04a6cd3f15a2a",
@@ -816,6 +822,14 @@ window.CLASSROOM_SITE = {
           "image": "Pete White Shoes.jpg",
           "target": "https://www.youtube.com/watch?v=-GSnmRZlgc4",
           "active": true
+        },
+        {
+          "id": "tile-1788479888296-945310c12fb2e8",
+          "type": "video",
+          "label": "Super Simple Songs Collection",
+          "image": "",
+          "target": "https://www.youtube.com/watch?v=LrAtBtQnvCE&list=RDLrAtBtQnvCE&start_radio=1",
+          "active": true
         }
       ]
     },
@@ -1060,6 +1074,47 @@ window.CLASSROOM_SITE = {
           "label": "Time to Go Home",
           "image": "Time to Go Home Goodbye.jpg",
           "target": "https://www.youtube.com/watch?v=LRuuuq0EeXc&list=RDLRuuuq0EeXc&start_radio=1",
+          "active": true
+        }
+      ]
+    },
+    "shapes": {
+      "title": "Shapes",
+      "subtitle": "",
+      "parent": "home",
+      "active": true,
+      "children": [],
+      "layout": [
+        {
+          "id": "tile-1788480833337-2a419bec3a3db8",
+          "type": "video",
+          "label": "I Like to Draw Shapes Colors Song",
+          "image": "draw color shapes song.jpg",
+          "target": "https://www.youtube.com/watch?v=AlB6ZNqykXU",
+          "active": true
+        },
+        {
+          "id": "tile-1788480289264-20af61333586",
+          "type": "video",
+          "label": "Shapes - Happy Sunshine",
+          "image": "Sunshine shapes.jpg",
+          "target": "https://www.youtube.com/watch?v=1nJ5VbyD6tY",
+          "active": true
+        },
+        {
+          "id": "tile-1788480472512-e1866c785618d",
+          "type": "video",
+          "label": "Learn Shapes Song",
+          "image": "shapes learning song.jpg",
+          "target": "https://www.youtube.com/watch?v=h9vxbPvwBT0",
+          "active": true
+        },
+        {
+          "id": "tile-1788480069512-ef05809fb9997",
+          "type": "video",
+          "label": "Pete the Cat Shapes",
+          "image": "Pete Shapes.jpg",
+          "target": "https://www.youtube.com/watch?v=hQO1soadGAA",
           "active": true
         }
       ]
